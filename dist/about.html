@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Trends</title>
+    <meta name='google-site-verification' content='YOUR_CODE'>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; transition: 0.3s; }
+        body.dark { background: #121212; color: #e0e0e0; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        body.dark .card { background: #1e1e1e; }
+        .ad-container { min-height: 250px; width: 100%; background: #f0f0f0; margin: 15px 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        body.dark .ad-container { background: #2a2a2a; }
+        .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
+        .filter-btn { padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 30px; cursor: pointer; }
+        body.dark .filter-btn { background: #2a2a2a; border-color: #444; color: #fff; }
+        .filter-btn.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+        #exit-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); z-index: 9999; text-align: center; }
+        body.dark #exit-modal { background: #1e1e1e; }
+        #exit-modal a { display: inline-block; margin-top: 10px; padding: 12px 30px; background: #ff6600; color: white; text-decoration: none; border-radius: 8px; }
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    </style>
+    <script>
+        window.EXIT_LINK = "https://your-offer-link.com";
+        window.GA_TAG = "<!-- GA4 Tag -->";
+    </script>
+    <!-- Adsterra Header -->
+</head>
+<body>
+    <div class="container">
+        <header style="display: flex; justify-content: space-between; padding: 10px 0;">
+            <h1>📰 Global Trends</h1>
+            <button onclick="document.body.classList.toggle('dark')" style="background:none;border:none;font-size:24px;">🌓</button>
+        </header>
+        <div class="ad-container"><!-- In-Body Ad --></div>
+        
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="US">US</button><button class="filter-btn" data-filter="GB">GB</button><button class="filter-btn" data-filter="CA">CA</button><button class="filter-btn" data-filter="AU">AU</button><button class="filter-btn" data-filter="DE">DE</button><button class="filter-btn" data-filter="FR">FR</button><button class="filter-btn" data-filter="IT">IT</button><button class="filter-btn" data-filter="ES">ES</button><button class="filter-btn" data-filter="JP">JP</button><button class="filter-btn" data-filter="IN">IN</button><button class="filter-btn" data-filter="BR">BR</button>
+        </div>
+
+        <div class="grid" id="newsGrid">
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">dwayne johnson</a></h3>
+                <p style="color:#666;">Get the latest updates on Dwayne "The Rock" Johnson, from his upcoming blockbuster movies to his dramatic return to the WWE. Discover how this Hollywood superstar and business mogul continues to dominate global entertainment.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">bryson dechambeau</a></h3>
+                <p style="color:#666;">Breaking news on bryson dechambeau.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">action collective</a></h3>
+                <p style="color:#666;">Breaking news on action collective.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">transfer</a></h3>
+                <p style="color:#666;">Breaking news on transfer.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">parramatta eels</a></h3>
+                <p style="color:#666;">Breaking news on parramatta eels.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">fifa soccer world cup</a></h3>
+                <p style="color:#666;">Breaking news on fifa soccer world cup.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">mcdonald's</a></h3>
+                <p style="color:#666;">Breaking news on mcdonald's.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">the u.s. election assistance commission.</a></h3>
+                <p style="color:#666;">Breaking news on the u.s. election assistance commission..</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">argentina national football team</a></h3>
+                <p style="color:#666;">Breaking news on argentina national football team.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">président</a></h3>
+                <p style="color:#666;">Breaking news on président.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">vladimir guerrero jr.</a></h3>
+                <p style="color:#666;">Breaking news on vladimir guerrero jr..</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">andrew s. boutros</a></h3>
+                <p style="color:#666;">Breaking news on andrew s. boutros.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">gendarmerie royale du canada</a></h3>
+                <p style="color:#666;">Breaking news on gendarmerie royale du canada.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="CA">
+                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">jennifer garner</a></h3>
+                <p style="color:#666;">Breaking news on jennifer garner.</p>
+                <small>📍 CA | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">pralognan la vanoise</a></h3>
+                <p style="color:#666;">Breaking news on pralognan la vanoise.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">union européenne</a></h3>
+                <p style="color:#666;">Breaking news on union européenne.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">terre du son</a></h3>
+                <p style="color:#666;">Breaking news on terre du son.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">andalousie</a></h3>
+                <p style="color:#666;">Breaking news on andalousie.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">global peace index 2026</a></h3>
+                <p style="color:#666;">Breaking news on global peace index 2026.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">jean luc reichmann</a></h3>
+                <p style="color:#666;">Breaking news on jean luc reichmann.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">ukraine</a></h3>
+                <p style="color:#666;">Breaking news on ukraine.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">resultat rattrapage bac 2026</a></h3>
+                <p style="color:#666;">Breaking news on resultat rattrapage bac 2026.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">michael olise suspension</a></h3>
+                <p style="color:#666;">Breaking news on michael olise suspension.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="FR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">a400m</a></h3>
+                <p style="color:#666;">Breaking news on a400m.</p>
+                <small>📍 FR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">csaba dalla zorza</a></h3>
+                <p style="color:#666;">Breaking news on csaba dalla zorza.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">zverev oggi</a></h3>
+                <p style="color:#666;">Breaking news on zverev oggi.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">notizia</a></h3>
+                <p style="color:#666;">Breaking news on notizia.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">garrison mathews</a></h3>
+                <p style="color:#666;">Breaking news on garrison mathews.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">kessler edwards</a></h3>
+                <p style="color:#666;">Breaking news on kessler edwards.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">stadio olimpico roma</a></h3>
+                <p style="color:#666;">Breaking news on stadio olimpico roma.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">ryanair finestrino</a></h3>
+                <p style="color:#666;">Breaking news on ryanair finestrino.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">ryanair</a></h3>
+                <p style="color:#666;">Breaking news on ryanair.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">ticketone</a></h3>
+                <p style="color:#666;">Breaking news on ticketone.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IT">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">matic</a></h3>
+                <p style="color:#666;">Breaking news on matic.</p>
+                <small>📍 IT | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">leonor de borbón</a></h3>
+                <p style="color:#666;">Breaking news on leonor de borbón.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">aquí la tierra</a></h3>
+                <p style="color:#666;">Breaking news on aquí la tierra.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">paz vega</a></h3>
+                <p style="color:#666;">Breaking news on paz vega.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">mason greenwood</a></h3>
+                <p style="color:#666;">Breaking news on mason greenwood.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">prioridad nacional</a></h3>
+                <p style="color:#666;">Breaking news on prioridad nacional.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">uv</a></h3>
+                <p style="color:#666;">Breaking news on uv.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">air force one</a></h3>
+                <p style="color:#666;">Breaking news on air force one.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">gva</a></h3>
+                <p style="color:#666;">Breaking news on gva.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">bea padin</a></h3>
+                <p style="color:#666;">Breaking news on bea padin.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="ES">
+                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">gonzalo bernardos</a></h3>
+                <p style="color:#666;">Breaking news on gonzalo bernardos.</p>
+                <small>📍 ES | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">風間俊介</a></h3>
+                <p style="color:#666;">Breaking news on 風間俊介.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">ドラゴンボールレジェンズ</a></h3>
+                <p style="color:#666;">Breaking news on ドラゴンボールレジェンズ.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">花火大会</a></h3>
+                <p style="color:#666;">Breaking news on 花火大会.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">ヴィッセル神戸</a></h3>
+                <p style="color:#666;">Breaking news on ヴィッセル神戸.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">鬼越トマホーク</a></h3>
+                <p style="color:#666;">Breaking news on 鬼越トマホーク.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">蒼井優 夫</a></h3>
+                <p style="color:#666;">Breaking news on 蒼井優 夫.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">エンカーナシオン</a></h3>
+                <p style="color:#666;">Breaking news on エンカーナシオン.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">利率</a></h3>
+                <p style="color:#666;">Breaking news on 利率.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">yg安田</a></h3>
+                <p style="color:#666;">Breaking news on yg安田.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="JP">
+                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">価格</a></h3>
+                <p style="color:#666;">Breaking news on 価格.</p>
+                <small>📍 JP | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">bse sensex</a></h3>
+                <p style="color:#666;">Breaking news on bse sensex.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">अनुपम खेर</a></h3>
+                <p style="color:#666;">Breaking news on अनुपम खेर.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">വിജയ്</a></h3>
+                <p style="color:#666;">Breaking news on വിജയ്.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">fifa world cup argentina</a></h3>
+                <p style="color:#666;">Breaking news on fifa world cup argentina.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">आनंदीबेन पटेल</a></h3>
+                <p style="color:#666;">Breaking news on आनंदीबेन पटेल.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">धमाल 4 समीक्षा</a></h3>
+                <p style="color:#666;">Breaking news on धमाल 4 समीक्षा.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">gold price news</a></h3>
+                <p style="color:#666;">Breaking news on gold price news.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">sk60</a></h3>
+                <p style="color:#666;">Breaking news on sk60.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">sabrina pasterski</a></h3>
+                <p style="color:#666;">Breaking news on sabrina pasterski.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="IN">
+                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">இதயம்</a></h3>
+                <p style="color:#666;">Breaking news on இதயம்.</p>
+                <small>📍 IN | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">spain vs belgium world cup 2026</a></h3>
+                <p style="color:#666;">Breaking news on spain vs belgium world cup 2026.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">brasil x polonia volei</a></h3>
+                <p style="color:#666;">Breaking news on brasil x polonia volei.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">radio online</a></h3>
+                <p style="color:#666;">Breaking news on radio online.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">zodíaco</a></h3>
+                <p style="color:#666;">Breaking news on zodíaco.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">sergey vladimirovich cherkasov</a></h3>
+                <p style="color:#666;">Breaking news on sergey vladimirovich cherkasov.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">vnl</a></h3>
+                <p style="color:#666;">Breaking news on vnl.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">greve gasolina</a></h3>
+                <p style="color:#666;">Breaking news on greve gasolina.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">governador interino</a></h3>
+                <p style="color:#666;">Breaking news on governador interino.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">rogério marinho</a></h3>
+                <p style="color:#666;">Breaking news on rogério marinho.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="BR">
+                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">motorista</a></h3>
+                <p style="color:#666;">Breaking news on motorista.</p>
+                <small>📍 BR | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">the rock</a></h3>
+                <p style="color:#666;">Breaking news on the rock.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">chelsea transfer news enzo fernandez</a></h3>
+                <p style="color:#666;">Breaking news on chelsea transfer news enzo fernandez.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">st james's place sovereign wealth departure</a></h3>
+                <p style="color:#666;">Breaking news on st james's place sovereign wealth departure.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">judi dench</a></h3>
+                <p style="color:#666;">Breaking news on judi dench.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">grand theft auto</a></h3>
+                <p style="color:#666;">Breaking news on grand theft auto.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">neco williams</a></h3>
+                <p style="color:#666;">Breaking news on neco williams.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">ethan nwaneri</a></h3>
+                <p style="color:#666;">Breaking news on ethan nwaneri.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">bcfc</a></h3>
+                <p style="color:#666;">Breaking news on bcfc.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="GB">
+                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">logan paul</a></h3>
+                <p style="color:#666;">Breaking news on logan paul.</p>
+                <small>📍 GB | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">indw vs en-w</a></h3>
+                <p style="color:#666;">Breaking news on indw vs en-w.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">kia telluride fire recall</a></h3>
+                <p style="color:#666;">Breaking news on kia telluride fire recall.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">bill simmons lebron james cavs</a></h3>
+                <p style="color:#666;">Breaking news on bill simmons lebron james cavs.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">nashville weather</a></h3>
+                <p style="color:#666;">Breaking news on nashville weather.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">mercedes 40 stunden woche</a></h3>
+                <p style="color:#666;">Breaking news on mercedes 40 stunden woche.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">brisbane airport flight paths</a></h3>
+                <p style="color:#666;">Breaking news on brisbane airport flight paths.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">европейский союз</a></h3>
+                <p style="color:#666;">Breaking news on европейский союз.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">jana armstrong</a></h3>
+                <p style="color:#666;">Breaking news on jana armstrong.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">roboter</a></h3>
+                <p style="color:#666;">Breaking news on roboter.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">retirement pension</a></h3>
+                <p style="color:#666;">Breaking news on retirement pension.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">psychotherapie</a></h3>
+                <p style="color:#666;">Breaking news on psychotherapie.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">monty don</a></h3>
+                <p style="color:#666;">Breaking news on monty don.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">paul okon-engstler transfer news</a></h3>
+                <p style="color:#666;">Breaking news on paul okon-engstler transfer news.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">mecklenburg-vorpommern</a></h3>
+                <p style="color:#666;">Breaking news on mecklenburg-vorpommern.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">raiffeisenbank plankstetten bafin</a></h3>
+                <p style="color:#666;">Breaking news on raiffeisenbank plankstetten bafin.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">wests tigers vs warriors</a></h3>
+                <p style="color:#666;">Breaking news on wests tigers vs warriors.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">gerichtssaal</a></h3>
+                <p style="color:#666;">Breaking news on gerichtssaal.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">nick daicos</a></h3>
+                <p style="color:#666;">Breaking news on nick daicos.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">ryanair fenster</a></h3>
+                <p style="color:#666;">Breaking news on ryanair fenster.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">xpeng</a></h3>
+                <p style="color:#666;">Breaking news on xpeng.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="DE">
+                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">tottenham hotspur</a></h3>
+                <p style="color:#666;">Breaking news on tottenham hotspur.</p>
+                <small>📍 DE | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="AU">
+                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">coles butter chicken roast chook</a></h3>
+                <p style="color:#666;">Breaking news on coles butter chicken roast chook.</p>
+                <small>📍 AU | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">scottish open tv coverage</a></h3>
+                <p style="color:#666;">Breaking news on scottish open tv coverage.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">cincinnati weather</a></h3>
+                <p style="color:#666;">Breaking news on cincinnati weather.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">chevrolet corvette grand sport</a></h3>
+                <p style="color:#666;">Breaking news on chevrolet corvette grand sport.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">louisville weather</a></h3>
+                <p style="color:#666;">Breaking news on louisville weather.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+            <div class="card" data-country="US">
+                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">pet shop boys depeche mode outkast</a></h3>
+                <p style="color:#666;">Breaking news on pet shop boys depeche mode outkast.</p>
+                <small>📍 US | 🏷️ General</small>
+            </div>
+            
+        </div>
+
+        <div class="ad-container"><!-- Footer Ad --></div>
+        <footer style="text-align:center;padding:20px 0;"><a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a></footer>
+    </div>
+
+    <div id="exit-modal">
+        <button onclick="closeExitModal()" style="float:right;background:none;border:none;font-size:20px;">✕</button>
+        <h3>Wait! Exclusive Offer 🎁</h3>
+        <a href="#" id="exit-link-btn" target="_blank">🔥 Claim Now</a>
+    </div>
+
+    <script defer>
+        document.querySelectorAll('.filter-btn').forEach(b => b.onclick = function() {
+            document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
+            this.classList.add('active');
+            let f = this.dataset.filter;
+            document.querySelectorAll('.card').forEach(c => c.style.display = (f === 'all' || c.dataset.country === f) ? 'block' : 'none');
+        });
+        let shown = false;
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0 && !shown) {
+                shown = true;
+                document.getElementById('exit-modal').style.display = 'block';
+                document.getElementById('exit-link-btn').href = window.EXIT_LINK;
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('a') && e.target.closest('a').href.includes(window.location.origin)) shown = false;
+        });
+        function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
+    </script>
+</body>
+          </html>
