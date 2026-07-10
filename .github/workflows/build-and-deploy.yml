@@ -1,0 +1,38 @@
+name: Global SEO Content Pipeline
+
+on:
+  schedule:
+    - cron: '*/20 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install deps
+        run: pip install -r requirements.txt
+
+      - name: Run Builder
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: python build.py
+
+      - name: Commit and Push (SKIPS if nothing changed)
+        run: |
+          git config user.name "GitHub Bot"
+          git config user.email "bot@github.com"
+          git add dist/
+          git diff --staged --quiet || git commit -m "Auto-update news [skip ci]"
+          git push
