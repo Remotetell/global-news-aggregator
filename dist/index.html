@@ -3,667 +3,1920 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global Trends</title>
-    <meta name='google-site-verification' content='YOUR_CODE'>
+    <title>Global Trends | News Aggregator</title>
+    
+    <!-- Google Search Console -->
+    <meta name='google-site-verification' content='zng8D6p1h0ssYPsuLPCMwRscYhqPvn57NUh4QvARxwY' />
+    
+    <!-- Mondiad Meta -->
+    <meta name='mnd-ver' content='y0lgd0iat07swhgvia1ww' />
+    
+    <!-- Google Analytics Header -->
+    <!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-5JQC3JHL');</script><!-- End Google Tag Manager -->
+    
     <style>
+        /* RESET */
         * { margin:0; padding:0; box-sizing:border-box; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; transition: 0.3s; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; transition: 0.3s; padding-top: 0; }
         body.dark { background: #121212; color: #e0e0e0; }
         .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        body.dark .card { background: #1e1e1e; }
-        .ad-container { min-height: 250px; width: 100%; background: #f0f0f0; margin: 15px 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        
+        /* HEADER */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 3px solid #e0e0e0; flex-wrap: wrap; }
+        .logo { font-size: 28px; font-weight: 800; background: linear-gradient(135deg, #1a73e8, #ff6600); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .theme-toggle { background: none; border: none; font-size: 24px; cursor: pointer; padding: 8px; }
+        
+        /* CATEGORY NAV */
+        .cat-nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 15px 0; padding: 10px 0; border-bottom: 1px solid #ddd; align-items: center; }
+        .cat-btn { padding: 6px 16px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        body.dark .cat-btn { background: #2a2a2a; border-color: #444; color: #fff; }
+        .cat-btn.active { background: #1a73e8; color: white; border-color: #1a73e8; }
+        .cat-btn.country-btn { border-color: #ff6600; }
+        .cat-btn.country-btn.active { background: #ff6600; color: white; }
+        .cat-nav .label { font-weight: bold; font-size: 13px; color: #666; margin-right: 5px; }
+        
+        /* GRID */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; margin-top: 20px; }
+        .card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.2s; }
+        body.dark .card { background: #1e1e1e; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        .card:hover { transform: translateY(-4px); }
+        .card img { width: 100%; height: 200px; object-fit: cover; background: #f0f0f0; }
+        .card-body { padding: 16px; }
+        .card-body h3 { font-size: 18px; margin-bottom: 8px; line-height: 1.4; }
+        .card-body h3 a { text-decoration: none; color: inherit; }
+        .card-body .summary { color: #666; font-size: 14px; margin: 8px 0; line-height: 1.5; }
+        body.dark .card-body .summary { color: #aaa; }
+        .card-body .meta { font-size: 12px; color: #999; display: flex; justify-content: space-between; margin-top: 12px; flex-wrap: wrap; gap: 5px; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #e8f0fe; color: #1a73e8; }
+        body.dark .badge { background: #2a3a5a; color: #8ab4f8; }
+        .badge.country { background: #fff3e0; color: #ff6600; }
+        body.dark .badge.country { background: #3a2a1a; color: #ff8844; }
+        
+        /* ADS CONTAINERS */
+        .ad-container { min-height: 250px; width: 100%; background: #f0f0f0; margin: 20px 0; border-radius: 12px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         body.dark .ad-container { background: #2a2a2a; }
-        .filter-bar { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0; }
-        .filter-btn { padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 30px; cursor: pointer; }
-        body.dark .filter-btn { background: #2a2a2a; border-color: #444; color: #fff; }
-        .filter-btn.active { background: #1a73e8; color: white; border-color: #1a73e8; }
-        #exit-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); z-index: 9999; text-align: center; }
+        .ad-container iframe { max-width: 100%; }
+        
+        /* SIDEBAR ADS */
+        .sidebar-ads { display: grid; grid-template-columns: 1fr; gap: 20px; margin: 20px 0; }
+        .sidebar-ads .ad-box { background: #fff; border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06); min-height: 200px; display: flex; align-items: center; justify-content: center; }
+        body.dark .sidebar-ads .ad-box { background: #1e1e1e; }
+        
+        /* EXIT MODAL */
+        #exit-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); z-index: 999999; text-align: center; border-radius: 16px 16px 0 0; }
         body.dark #exit-modal { background: #1e1e1e; }
-        #exit-modal a { display: inline-block; margin-top: 10px; padding: 12px 30px; background: #ff6600; color: white; text-decoration: none; border-radius: 8px; }
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+        #exit-modal a { display: inline-block; margin-top: 10px; padding: 12px 30px; background: #ff6600; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        #exit-modal .close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; }
+        
+        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: start; gap: 10px; } }
     </style>
-    <script>
-        window.EXIT_LINK = "https://your-offer-link.com";
-        window.GA_TAG = "<!-- GA4 Tag -->";
-    </script>
-    <!-- Adsterra Header -->
 </head>
 <body>
+    <!-- AADS STICKY HEADER -->
+    <!-- BEGIN AADS AD UNIT 2447589 --><div style='position: absolute; z-index: 99999'><input autocomplete='off' type='checkbox' id='aadsstickymrf77ft8' hidden /><div style='padding-top: auto; padding-bottom: 0;'><div style='width:100%;height:auto;position:fixed;text-align:center;font-size:0;top:0;left:0;right:0;margin:auto'><label for='aadsstickymrf77ft8' style='top: 50%;transform: translateY(-50%);right:24px; position: absolute;border-radius: 4px; background: rgba(248, 248, 249, 0.70); padding: 4px;z-index: 99999;cursor:pointer'><svg fill='#000000' height='16px' width='16px' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 490 490'><polygon points='456.851,0 245,212.564 33.149,0 0.708,32.337 212.669,245.004 0.708,457.678 33.149,490 245,277.443 456.851,490 489.292,457.678 277.331,245.004 489.292,32.337 '/></svg></label><div id='frame' style='width: 100%;margin: auto;position: relative; z-index: 99998;'><iframe data-aa='2447589' src='//acceptable.a-ads.com/2447589/?size=Adaptive' style='border:0; padding:0; width:70%; height:auto; overflow:hidden; margin: auto'></iframe></div></div><style>#aadsstickymrf77ft8:checked + div { display: none; }</style></div></div><!-- END AADS AD UNIT 2447589 -->
+    
+    <!-- Google Analytics Body -->
+    <!-- Google Tag Manager (noscript) --><noscript><iframe src='https://www.googletagmanager.com/ns.html?id=GTM-5JQC3JHL' height='0' width='0' style='display:none;visibility:hidden'></iframe></noscript><!-- End Google Tag Manager (noscript) -->
+    
     <div class="container">
-        <header style="display: flex; justify-content: space-between; padding: 10px 0;">
-            <h1>📰 Global Trends</h1>
-            <button onclick="document.body.classList.toggle('dark')" style="background:none;border:none;font-size:24px;">🌓</button>
+        <!-- HEADER -->
+        <header class="header">
+            <span class="logo">🌍 Global Trends</span>
+            <div>
+                <button class="theme-toggle" onclick="document.body.classList.toggle('dark')">🌓</button>
+            </div>
         </header>
-        <div class="ad-container"><!-- In-Body Ad --></div>
         
-        <div class="filter-bar">
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="US">US</button><button class="filter-btn" data-filter="GB">GB</button><button class="filter-btn" data-filter="CA">CA</button><button class="filter-btn" data-filter="AU">AU</button><button class="filter-btn" data-filter="DE">DE</button><button class="filter-btn" data-filter="FR">FR</button><button class="filter-btn" data-filter="IT">IT</button><button class="filter-btn" data-filter="ES">ES</button><button class="filter-btn" data-filter="JP">JP</button><button class="filter-btn" data-filter="IN">IN</button><button class="filter-btn" data-filter="BR">BR</button>
+        <!-- CATEGORY NAVIGATION -->
+        <div class="cat-nav">
+            <span class="label">📌 Topics:</span>
+            <button class="cat-btn active" data-filter="all">All</button>
+            
+            <button class="cat-btn" data-filter="General">General</button>
+            
+            <button class="cat-btn" data-filter="Politics">Politics</button>
+            
+            <button class="cat-btn" data-filter="Sports">Sports</button>
+            
+            <button class="cat-btn" data-filter="Technology">Technology</button>
+            
+            <span class="label" style="margin-left:10px;">🌎 Countries:</span>
+            
+            <button class="cat-btn country-btn" data-country="US">US</button>
+            
+            <button class="cat-btn country-btn" data-country="GB">GB</button>
+            
+            <button class="cat-btn country-btn" data-country="CA">CA</button>
+            
+            <button class="cat-btn country-btn" data-country="AU">AU</button>
+            
+            <button class="cat-btn country-btn" data-country="DE">DE</button>
+            
+            <button class="cat-btn country-btn" data-country="FR">FR</button>
+            
+            <button class="cat-btn country-btn" data-country="IT">IT</button>
+            
+            <button class="cat-btn country-btn" data-country="ES">ES</button>
+            
+            <button class="cat-btn country-btn" data-country="JP">JP</button>
+            
+            <button class="cat-btn country-btn" data-country="IN">IN</button>
+            
+            <button class="cat-btn country-btn" data-country="BR">BR</button>
+            
         </div>
-
+        
+        <!-- ADSTERRA 728x90 BANNER -->
+        <div class="ad-container"><script>atOptions = {'key' : '9d257237ef106948b5ba5f5470d353e4','format' : 'iframe','height' : 90,'width' : 728,'params' : {}};</script><script src='https://www.highperformanceformat.com/9d257237ef106948b5ba5f5470d353e4/invoke.js'></script></div>
+        
+        <!-- NEWS GRID -->
         <div class="grid" id="newsGrid">
             
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">tour de france heute</a></h3>
-                <p style="color:#666;">Breaking news on tour de france heute.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">nate bittle</a></h3>
-                <p style="color:#666;">Breaking news on nate bittle.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">tim merlier</a></h3>
-                <p style="color:#666;">Breaking news on tim merlier.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">jannik sinner</a></h3>
-                <p style="color:#666;">Breaking news on jannik sinner.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">u19 em frauen</a></h3>
-                <p style="color:#666;">Breaking news on u19 em frauen.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">novak djokovic</a></h3>
-                <p style="color:#666;">Breaking news on novak djokovic.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">nolan wells what happened</a></h3>
-                <p style="color:#666;">Breaking news on nolan wells what happened.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">wimbeldon</a></h3>
-                <p style="color:#666;">Breaking news on wimbeldon.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">microsoft stock</a></h3>
-                <p style="color:#666;">Breaking news on microsoft stock.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">july 10 2026 astrology</a></h3>
-                <p style="color:#666;">Breaking news on july 10 2026 astrology.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">eugenie bouchard</a></h3>
-                <p style="color:#666;">Breaking news on eugenie bouchard.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">goolagong</a></h3>
-                <p style="color:#666;">Breaking news on goolagong.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">bogdan konyushkov</a></h3>
-                <p style="color:#666;">Breaking news on bogdan konyushkov.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">skynews</a></h3>
-                <p style="color:#666;">Breaking news on skynews.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">nadal</a></h3>
-                <p style="color:#666;">Breaking news on nadal.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">alfred the great</a></h3>
-                <p style="color:#666;">Breaking news on alfred the great.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">sky news</a></h3>
-                <p style="color:#666;">Breaking news on sky news.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">climate emergency declaration</a></h3>
-                <p style="color:#666;">Breaking news on climate emergency declaration.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="GB">
-                <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank" style="text-decoration:none;color:inherit;">mcenroe</a></h3>
-                <p style="color:#666;">Breaking news on mcenroe.</p>
-                <small>📍 GB | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">yoann offredo</a></h3>
-                <p style="color:#666;">Breaking news on yoann offredo.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">élections de mi-mandat aux états-unis</a></h3>
-                <p style="color:#666;">Breaking news on élections de mi-mandat aux états-unis.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">romain grégoire</a></h3>
-                <p style="color:#666;">Breaking news on romain grégoire.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">jalabert</a></h3>
-                <p style="color:#666;">Breaking news on jalabert.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">sinner vs djokovic</a></h3>
-                <p style="color:#666;">Breaking news on sinner vs djokovic.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">gendarmerie</a></h3>
-                <p style="color:#666;">Breaking news on gendarmerie.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">ann widdecombe</a></h3>
-                <p style="color:#666;">Breaking news on ann widdecombe.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">tennis</a></h3>
-                <p style="color:#666;">Breaking news on tennis.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">immobilier</a></h3>
-                <p style="color:#666;">Breaking news on immobilier.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">argentina soccer fbi</a></h3>
-                <p style="color:#666;">Breaking news on argentina soccer fbi.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">bocce</a></h3>
-                <p style="color:#666;">Breaking news on bocce.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">toyota</a></h3>
-                <p style="color:#666;">Breaking news on toyota.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">alex baudin</a></h3>
-                <p style="color:#666;">Breaking news on alex baudin.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">wir in bayern</a></h3>
-                <p style="color:#666;">Breaking news on wir in bayern.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="FR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank" style="text-decoration:none;color:inherit;">nicollin</a></h3>
-                <p style="color:#666;">Breaking news on nicollin.</p>
-                <small>📍 FR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="CA">
-                <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank" style="text-decoration:none;color:inherit;">video game</a></h3>
-                <p style="color:#666;">Breaking news on video game.</p>
-                <small>📍 CA | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">senator mitch mcconnell</a></h3>
-                <p style="color:#666;">Breaking news on senator mitch mcconnell.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">john degenkolb</a></h3>
-                <p style="color:#666;">Breaking news on john degenkolb.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">patrick cripps</a></h3>
-                <p style="color:#666;">Breaking news on patrick cripps.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">the rolling stones foreign tongues</a></h3>
-                <p style="color:#666;">Breaking news on the rolling stones foreign tongues.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">prime drinks</a></h3>
-                <p style="color:#666;">Breaking news on prime drinks.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">arthur fery</a></h3>
-                <p style="color:#666;">Breaking news on arthur fery.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="DE">
-                <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank" style="text-decoration:none;color:inherit;">wimbledon 2026 spielplan</a></h3>
-                <p style="color:#666;">Breaking news on wimbledon 2026 spielplan.</p>
-                <small>📍 DE | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">cathay pacific</a></h3>
-                <p style="color:#666;">Breaking news on cathay pacific.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">sinner</a></h3>
-                <p style="color:#666;">Breaking news on sinner.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="AU">
-                <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank" style="text-decoration:none;color:inherit;">alastair clarkson</a></h3>
-                <p style="color:#666;">Breaking news on alastair clarkson.</p>
-                <small>📍 AU | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">absentismo laboral</a></h3>
-                <p style="color:#666;">Breaking news on absentismo laboral.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">boris becker</a></h3>
-                <p style="color:#666;">Breaking news on boris becker.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">querella</a></h3>
-                <p style="color:#666;">Breaking news on querella.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">emendamento</a></h3>
-                <p style="color:#666;">Breaking news on emendamento.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">estafa</a></h3>
-                <p style="color:#666;">Breaking news on estafa.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">rai 2 diretta</a></h3>
-                <p style="color:#666;">Breaking news on rai 2 diretta.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">フェデラー</a></h3>
-                <p style="color:#666;">Breaking news on フェデラー.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">centro nacional de inteligencia</a></h3>
-                <p style="color:#666;">Breaking news on centro nacional de inteligencia.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">tv8 streaming</a></h3>
-                <p style="color:#666;">Breaking news on tv8 streaming.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">anne widdecombe</a></h3>
-                <p style="color:#666;">Breaking news on anne widdecombe.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">mukhbir</a></h3>
-                <p style="color:#666;">Breaking news on mukhbir.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">tv 8</a></h3>
-                <p style="color:#666;">Breaking news on tv 8.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">ainhoa sánchez gómez</a></h3>
-                <p style="color:#666;">Breaking news on ainhoa sánchez gómez.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">cristiana capotondi</a></h3>
-                <p style="color:#666;">Breaking news on cristiana capotondi.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">lottery sambad today</a></h3>
-                <p style="color:#666;">Breaking news on lottery sambad today.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">ryanair</a></h3>
-                <p style="color:#666;">Breaking news on ryanair.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">biglietti concerto vasco rossi</a></h3>
-                <p style="color:#666;">Breaking news on biglietti concerto vasco rossi.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">foreign policy</a></h3>
-                <p style="color:#666;">Breaking news on foreign policy.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="ES">
-                <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank" style="text-decoration:none;color:inherit;">tom hanks</a></h3>
-                <p style="color:#666;">Breaking news on tom hanks.</p>
-                <small>📍 ES | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">gasolio</a></h3>
-                <p style="color:#666;">Breaking news on gasolio.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">starto entertainment</a></h3>
-                <p style="color:#666;">Breaking news on starto entertainment.</p>
-                <small>📍 JP | 🏷️ Entertainment</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">सरसों</a></h3>
-                <p style="color:#666;">Breaking news on सरसों.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IT">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank" style="text-decoration:none;color:inherit;">meteo torino</a></h3>
-                <p style="color:#666;">Breaking news on meteo torino.</p>
-                <small>📍 IT | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">錦織圭</a></h3>
-                <p style="color:#666;">Breaking news on 錦織圭.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">cji</a></h3>
-                <p style="color:#666;">Breaking news on cji.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">シナー</a></h3>
-                <p style="color:#666;">Breaking news on シナー.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">tg eapcet</a></h3>
-                <p style="color:#666;">Breaking news on tg eapcet.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">djokovic</a></h3>
-                <p style="color:#666;">Breaking news on djokovic.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">ジョコビッチ</a></h3>
-                <p style="color:#666;">Breaking news on ジョコビッチ.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">mg hector hawk phev</a></h3>
-                <p style="color:#666;">Breaking news on mg hector hawk phev.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">ジャンニ・インファンティーノ</a></h3>
-                <p style="color:#666;">Breaking news on ジャンニ・インファンティーノ.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">br-381</a></h3>
-                <p style="color:#666;">Breaking news on br-381.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">ರಸ್ತೆ</a></h3>
-                <p style="color:#666;">Breaking news on ರಸ್ತೆ.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">ズベレフ</a></h3>
-                <p style="color:#666;">Breaking news on ズベレフ.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">pouso forçado</a></h3>
-                <p style="color:#666;">Breaking news on pouso forçado.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="IN">
-                <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank" style="text-decoration:none;color:inherit;">yamaha fz blue flex</a></h3>
-                <p style="color:#666;">Breaking news on yamaha fz blue flex.</p>
-                <small>📍 IN | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">javaリング</a></h3>
-                <p style="color:#666;">Breaking news on javaリング.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">ajax x aek larnaca</a></h3>
-                <p style="color:#666;">Breaking news on ajax x aek larnaca.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">geovana</a></h3>
-                <p style="color:#666;">Breaking news on geovana.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">樋口新葉</a></h3>
-                <p style="color:#666;">Breaking news on 樋口新葉.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">mauricio de sousa</a></h3>
-                <p style="color:#666;">Breaking news on mauricio de sousa.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="JP">
-                <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank" style="text-decoration:none;color:inherit;">堤礼実</a></h3>
-                <p style="color:#666;">Breaking news on 堤礼実.</p>
-                <small>📍 JP | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">jorge jesus</a></h3>
-                <p style="color:#666;">Breaking news on jorge jesus.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="BR">
-                <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank" style="text-decoration:none;color:inherit;">pedro emanuel</a></h3>
-                <p style="color:#666;">Breaking news on pedro emanuel.</p>
-                <small>📍 BR | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">indiana fever sophie cunningham</a></h3>
-                <p style="color:#666;">Breaking news on indiana fever sophie cunningham.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">carlos alcaraz</a></h3>
-                <p style="color:#666;">Breaking news on carlos alcaraz.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">nfl top 100</a></h3>
-                <p style="color:#666;">Breaking news on nfl top 100.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">mary stoiana</a></h3>
-                <p style="color:#666;">Breaking news on mary stoiana.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">chase elliott</a></h3>
-                <p style="color:#666;">Breaking news on chase elliott.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">katy perry</a></h3>
-                <p style="color:#666;">Breaking news on katy perry.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">housing bill unsigned trump</a></h3>
-                <p style="color:#666;">Breaking news on housing bill unsigned trump.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">carnival new cruise ship 2029</a></h3>
-                <p style="color:#666;">Breaking news on carnival new cruise ship 2029.</p>
-                <small>📍 US | 🏷️ General</small>
-            </div>
-            
-            <div class="card" data-country="US">
-                <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank" style="text-decoration:none;color:inherit;">h-1b visa</a></h3>
-                <p style="color:#666;">Breaking news on h-1b visa.</p>
-                <small>📍 US | 🏷️ General</small>
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="rein me in" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">rein me in</a></h3>
+                    <p class="summary">Breaking news on rein me in.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="triathlon hamburg 2026" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">triathlon hamburg 2026</a></h3>
+                    <p class="summary">Breaking news on triathlon hamburg 2026.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="cutter gauthier" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">cutter gauthier</a></h3>
+                    <p class="summary">Breaking news on cutter gauthier.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="royal charity polo cup 2026" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">royal charity polo cup 2026</a></h3>
+                    <p class="summary">Breaking news on royal charity polo cup 2026.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="ohio lottery" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">ohio lottery</a></h3>
+                    <p class="summary">Breaking news on ohio lottery.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="afd nordrhein-westfalen" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">afd nordrhein-westfalen</a></h3>
+                    <p class="summary">Breaking news on afd nordrhein-westfalen.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="sc lottery" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">sc lottery</a></h3>
+                    <p class="summary">Breaking news on sc lottery.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="action collective boeuf" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">action collective boeuf</a></h3>
+                    <p class="summary">Breaking news on action collective boeuf.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="nicky hayen" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">nicky hayen</a></h3>
+                    <p class="summary">Breaking news on nicky hayen.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="home run derby" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">home run derby</a></h3>
+                    <p class="summary">Breaking news on home run derby.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="wimbledon 2025" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">wimbledon 2025</a></h3>
+                    <p class="summary">Breaking news on wimbledon 2025.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="sherbrooke" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">sherbrooke</a></h3>
+                    <p class="summary">Breaking news on sherbrooke.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="ole pohlmann" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">ole pohlmann</a></h3>
+                    <p class="summary">Breaking news on ole pohlmann.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="Politics">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="the white house" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Politics</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">the white house</a></h3>
+                    <p class="summary">Breaking news on the white house.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="Technology">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="air canada plane montreal airport" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Technology</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">air canada plane montreal airport</a></h3>
+                    <p class="summary">Breaking news on air canada plane montreal airport.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="black flag resynced" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">black flag resynced</a></h3>
+                    <p class="summary">Breaking news on black flag resynced.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="reform jersey" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">reform jersey</a></h3>
+                    <p class="summary">Breaking news on reform jersey.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="sinner djokovic" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">sinner djokovic</a></h3>
+                    <p class="summary">Breaking news on sinner djokovic.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="immigration" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">immigration</a></h3>
+                    <p class="summary">Breaking news on immigration.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="tammy beaumont" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">tammy beaumont</a></h3>
+                    <p class="summary">Breaking news on tammy beaumont.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="gable steveson" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">gable steveson</a></h3>
+                    <p class="summary">Breaking news on gable steveson.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="charley crockett" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">charley crockett</a></h3>
+                    <p class="summary">Breaking news on charley crockett.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="fc bayern transfer" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">fc bayern transfer</a></h3>
+                    <p class="summary">Breaking news on fc bayern transfer.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="djokovic wife" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">djokovic wife</a></h3>
+                    <p class="summary">Breaking news on djokovic wife.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="mike boynton" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">mike boynton</a></h3>
+                    <p class="summary">Breaking news on mike boynton.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="anna wintour" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">anna wintour</a></h3>
+                    <p class="summary">Breaking news on anna wintour.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="serbia" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">serbia</a></h3>
+                    <p class="summary">Breaking news on serbia.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="anna wintour" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">anna wintour</a></h3>
+                    <p class="summary">Breaking news on anna wintour.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="anna wintour" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">anna wintour</a></h3>
+                    <p class="summary">Breaking news on anna wintour.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="Technology">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="make america healthy again" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Technology</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">make america healthy again</a></h3>
+                    <p class="summary">Breaking news on make america healthy again.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="zimbabwe" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">zimbabwe</a></h3>
+                    <p class="summary">Breaking news on zimbabwe.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="jose mourinho" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">jose mourinho</a></h3>
+                    <p class="summary">Breaking news on jose mourinho.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="US" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="universe" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 US</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=US" target="_blank">universe</a></h3>
+                    <p class="summary">Breaking news on universe.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="karim adeyemi" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">karim adeyemi</a></h3>
+                    <p class="summary">Breaking news on karim adeyemi.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="norwegen england übertragung" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">norwegen england übertragung</a></h3>
+                    <p class="summary">Breaking news on norwegen england übertragung.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="canada day unexploded fireworks ottawa" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">canada day unexploded fireworks ottawa</a></h3>
+                    <p class="summary">Breaking news on canada day unexploded fireworks ottawa.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="CA" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="bc hydro outage" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 CA</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=CA" target="_blank">bc hydro outage</a></h3>
+                    <p class="summary">Breaking news on bc hydro outage.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="altersvorsorge" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">altersvorsorge</a></h3>
+                    <p class="summary">Breaking news on altersvorsorge.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="DE" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="alix earle" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 DE</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=DE" target="_blank">alix earle</a></h3>
+                    <p class="summary">Breaking news on alix earle.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="jackpot" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">jackpot</a></h3>
+                    <p class="summary">Breaking news on jackpot.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="meteo milano" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">meteo milano</a></h3>
+                    <p class="summary">Breaking news on meteo milano.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="match 10 juillet 2026" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">match 10 juillet 2026</a></h3>
+                    <p class="summary">Breaking news on match 10 juillet 2026.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="fabian" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">fabian</a></h3>
+                    <p class="summary">Breaking news on fabian.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="feltri" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">feltri</a></h3>
+                    <p class="summary">Breaking news on feltri.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="veronique sanson" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">veronique sanson</a></h3>
+                    <p class="summary">Breaking news on veronique sanson.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="irune dorado" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">irune dorado</a></h3>
+                    <p class="summary">Breaking news on irune dorado.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="sette" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">sette</a></h3>
+                    <p class="summary">Breaking news on sette.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="thierry ardisson" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">thierry ardisson</a></h3>
+                    <p class="summary">Breaking news on thierry ardisson.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="jorge jesus" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">jorge jesus</a></h3>
+                    <p class="summary">Breaking news on jorge jesus.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="sinner djokovic wimbledon 2026" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">sinner djokovic wimbledon 2026</a></h3>
+                    <p class="summary">Breaking news on sinner djokovic wimbledon 2026.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="carlos alcaraz" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">carlos alcaraz</a></h3>
+                    <p class="summary">Breaking news on carlos alcaraz.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="benjamin pavard" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">benjamin pavard</a></h3>
+                    <p class="summary">Breaking news on benjamin pavard.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="halsey" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">halsey</a></h3>
+                    <p class="summary">Breaking news on halsey.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="atp ranking" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">atp ranking</a></h3>
+                    <p class="summary">Breaking news on atp ranking.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="espagne belgique" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">espagne belgique</a></h3>
+                    <p class="summary">Breaking news on espagne belgique.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="incidente stradale" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">incidente stradale</a></h3>
+                    <p class="summary">Breaking news on incidente stradale.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="abogado" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">abogado</a></h3>
+                    <p class="summary">Breaking news on abogado.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="reazione a catena" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">reazione a catena</a></h3>
+                    <p class="summary">Breaking news on reazione a catena.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="fonsi nieto" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">fonsi nieto</a></h3>
+                    <p class="summary">Breaking news on fonsi nieto.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IT" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="alcaraz" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IT</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IT" target="_blank">alcaraz</a></h3>
+                    <p class="summary">Breaking news on alcaraz.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="pitingo" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">pitingo</a></h3>
+                    <p class="summary">Breaking news on pitingo.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="fiebre hemorrágica de crimea-congo" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">fiebre hemorrágica de crimea-congo</a></h3>
+                    <p class="summary">Breaking news on fiebre hemorrágica de crimea-congo.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="ES" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="flotilla" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 ES</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=ES" target="_blank">flotilla</a></h3>
+                    <p class="summary">Breaking news on flotilla.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="七夕 賞" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">七夕 賞</a></h3>
+                    <p class="summary">Breaking news on 七夕 賞.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="ஜான்வி கபூர்" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">ஜான்வி கபூர்</a></h3>
+                    <p class="summary">Breaking news on ஜான்வி கபூர்.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="राजस्थान" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">राजस्थान</a></h3>
+                    <p class="summary">Breaking news on राजस्थान.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="wimbledon" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">wimbledon</a></h3>
+                    <p class="summary">Breaking news on wimbledon.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="t20 blast" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">t20 blast</a></h3>
+                    <p class="summary">Breaking news on t20 blast.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="h-1b visa" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">h-1b visa</a></h3>
+                    <p class="summary">Breaking news on h-1b visa.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="ポケモンカード" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">ポケモンカード</a></h3>
+                    <p class="summary">Breaking news on ポケモンカード.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="yamaha fz blue flex fuel" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">yamaha fz blue flex fuel</a></h3>
+                    <p class="summary">Breaking news on yamaha fz blue flex fuel.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="who cancer" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">who cancer</a></h3>
+                    <p class="summary">Breaking news on who cancer.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="裁判" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">裁判</a></h3>
+                    <p class="summary">Breaking news on 裁判.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="shubman gill" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">shubman gill</a></h3>
+                    <p class="summary">Breaking news on shubman gill.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="中国共産党" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">中国共産党</a></h3>
+                    <p class="summary">Breaking news on 中国共産党.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="অগ্নিমিত্রা পাল" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">অগ্নিমিত্রা পাল</a></h3>
+                    <p class="summary">Breaking news on অগ্নিমিত্রা পাল.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="フジロック 2026" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">フジロック 2026</a></h3>
+                    <p class="summary">Breaking news on フジロック 2026.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="IN" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="the odyssey" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 IN</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=IN" target="_blank">the odyssey</a></h3>
+                    <p class="summary">Breaking news on the odyssey.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:00:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="フジロック" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">フジロック</a></h3>
+                    <p class="summary">Breaking news on フジロック.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="Technology">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="starto entertainment" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Technology</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">starto entertainment</a></h3>
+                    <p class="summary">Breaking news on starto entertainment.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 08:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="Technology">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="ryanair" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Technology</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">ryanair</a></h3>
+                    <p class="summary">Breaking news on ryanair.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="フェデラー" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">フェデラー</a></h3>
+                    <p class="summary">Breaking news on フェデラー.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 08:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="JP" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="錦織圭" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 JP</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=JP" target="_blank">錦織圭</a></h3>
+                    <p class="summary">Breaking news on 錦織圭.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 08:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="semaglutide" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">semaglutide</a></h3>
+                    <p class="summary">Breaking news on semaglutide.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="irmão" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">irmão</a></h3>
+                    <p class="summary">Breaking news on irmão.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="deputado" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">deputado</a></h3>
+                    <p class="summary">Breaking news on deputado.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="adeyemi" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">adeyemi</a></h3>
+                    <p class="summary">Breaking news on adeyemi.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="simaria mendes" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">simaria mendes</a></h3>
+                    <p class="summary">Breaking news on simaria mendes.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="vale gás" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">vale gás</a></h3>
+                    <p class="summary">Breaking news on vale gás.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="vacina" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">vacina</a></h3>
+                    <p class="summary">Breaking news on vacina.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="edge 70 max" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">edge 70 max</a></h3>
+                    <p class="summary">Breaking news on edge 70 max.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="BR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="mordida" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 BR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=BR" target="_blank">mordida</a></h3>
+                    <p class="summary">Breaking news on mordida.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="Sports">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="tennis scores" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Sports</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">tennis scores</a></h3>
+                    <p class="summary">Breaking news on tennis scores.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="novak djokovic" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">novak djokovic</a></h3>
+                    <p class="summary">Breaking news on novak djokovic.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="Sports">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="tennis" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">Sports</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">tennis</a></h3>
+                    <p class="summary">Breaking news on tennis.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 07:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="wimbeldon" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">wimbeldon</a></h3>
+                    <p class="summary">Breaking news on wimbeldon.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 07:30:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="bocce" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">bocce</a></h3>
+                    <p class="summary">Breaking news on bocce.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 07:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="senator mitch mcconnell" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">senator mitch mcconnell</a></h3>
+                    <p class="summary">Breaking news on senator mitch mcconnell.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 07:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="patrick cripps" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">patrick cripps</a></h3>
+                    <p class="summary">Breaking news on patrick cripps.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 07:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="arthur fery parents" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">arthur fery parents</a></h3>
+                    <p class="summary">Breaking news on arthur fery parents.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 06:20:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="prime drinks" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">prime drinks</a></h3>
+                    <p class="summary">Breaking news on prime drinks.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 06:10:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="GB" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="adeyemi" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 GB</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=GB" target="_blank">adeyemi</a></h3>
+                    <p class="summary">Breaking news on adeyemi.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 09:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="AU" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="cathay pacific" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 AU</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=AU" target="_blank">cathay pacific</a></h3>
+                    <p class="summary">Breaking news on cathay pacific.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 05:40:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="meteo agen" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">meteo agen</a></h3>
+                    <p class="summary">Breaking news on meteo agen.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="tous en cuisine la recette du jour" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">tous en cuisine la recette du jour</a></h3>
+                    <p class="summary">Breaking news on tous en cuisine la recette du jour.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="corruption" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">corruption</a></h3>
+                    <p class="summary">Breaking news on corruption.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card" data-country="FR" data-category="General">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='200'%3E%3Crect width='400' height='200' fill='%23e0e0e0'/%3E%3Ctext x='200' y='110' font-size='60' text-anchor='middle'%3E📰%3C/text%3E%3C/svg%3E" alt="xbox game pass" loading="lazy" width="400" height="200">
+                <div class="card-body">
+                    <div>
+                        <span class="badge">General</span>
+                        <span class="badge country">📍 FR</span>
+                    </div>
+                    <h3><a href="https://trends.google.com/trending/rss?geo=FR" target="_blank">xbox game pass</a></h3>
+                    <p class="summary">Breaking news on xbox game pass.</p>
+                    <div class="meta">
+                        <span>Google News</span>
+                        <span>Fri, 10 Jul 2026 10:50:00 -0700</span>
+                    </div>
+                </div>
             </div>
             
         </div>
-
-        <div class="ad-container"><!-- Footer Ad --></div>
-        <footer style="text-align:center;padding:20px 0;"><a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a></footer>
+        
+        <!-- ADSTERRA NATIVE BANNER (Between Articles) -->
+        <div class="ad-container"><script async='async' data-cfasync='false' src='https://pl30301628.effectivecpmnetwork.com/4025dfbfbbbd9efe1f7bd401015a25ca/invoke.js'></script><div id='container-4025dfbfbbbd9efe1f7bd401015a25ca'></div></div>
+        
+        <!-- ADSTERRA 468x60 BANNER -->
+        <div class="ad-container"><script>atOptions = {'key' : '52402b1f462952e33fa880d3b5340d86','format' : 'iframe','height' : 60,'width' : 468,'params' : {}};</script><script src='https://www.highperformanceformat.com/52402b1f462952e33fa880d3b5340d86/invoke.js'></script></div>
+        
+        <!-- SIDEBAR-STYLE ADS ROW -->
+        <div class="sidebar-ads">
+            <div class="ad-box"><script>atOptions = {'key' : '491b3ceffff5e8eb7fa015652a027002','format' : 'iframe','height' : 50,'width' : 320,'params' : {}};</script><script src='https://www.highperformanceformat.com/491b3ceffff5e8eb7fa015652a027002/invoke.js'></script></div>
+            <div class="ad-box"><script src='https://pl30301625.effectivecpmnetwork.com/78/e4/b7/78e4b799b25f2b096c37fc73c3acabd4.js'></script></div>
+        </div>
+        
+        <!-- FOOTER -->
+        <footer style="text-align:center;padding:20px 0;margin-top:20px;border-top:1px solid #ddd;">
+            <a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a>
+        </footer>
     </div>
-
+    
+    <!-- EXIT MODAL -->
     <div id="exit-modal">
-        <button onclick="closeExitModal()" style="float:right;background:none;border:none;font-size:20px;">✕</button>
-        <h3>Wait! Exclusive Offer 🎁</h3>
-        <a href="#" id="exit-link-btn" target="_blank">🔥 Claim Now</a>
+        <button class="close" onclick="closeExitModal()">✕</button>
+        <h3>🔥 Wait! Don't leave empty-handed</h3>
+        <p>Check out this exclusive offer before you go.</p>
+        <a href="#" id="exit-link-btn" target="_blank">👉 Claim Offer</a>
+        <br><small><a href="#" onclick="closeExitModal(); return false;">No thanks, stay on site</a></small>
     </div>
-
+    
     <script defer>
-        document.querySelectorAll('.filter-btn').forEach(b => b.onclick = function() {
-            document.querySelectorAll('.filter-btn').forEach(x => x.classList.remove('active'));
-            this.classList.add('active');
-            let f = this.dataset.filter;
-            document.querySelectorAll('.card').forEach(c => c.style.display = (f === 'all' || c.dataset.country === f) ? 'block' : 'none');
+        // --- FILTER LOGIC (Country + Category) ---
+        const cards = document.querySelectorAll('.card');
+        let activeCategory = 'all';
+        let activeCountry = 'all';
+        
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                if (this.dataset.country) {
+                    activeCountry = this.dataset.country;
+                    document.querySelectorAll('.country-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                } else {
+                    activeCategory = this.dataset.filter;
+                    document.querySelectorAll('.cat-btn:not(.country-btn)').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                }
+                applyFilters();
+            });
         });
+        
+        function applyFilters() {
+            cards.forEach(card => {
+                const catMatch = activeCategory === 'all' || card.dataset.category === activeCategory;
+                const countryMatch = activeCountry === 'all' || card.dataset.country === activeCountry;
+                card.style.display = (catMatch && countryMatch) ? 'block' : 'none';
+            });
+        }
+        
+        // --- EXIT INTENT ---
         let shown = false;
         document.addEventListener('mouseleave', (e) => {
             if (e.clientY < 0 && !shown) {
                 shown = true;
                 document.getElementById('exit-modal').style.display = 'block';
-                document.getElementById('exit-link-btn').href = window.EXIT_LINK;
+                document.getElementById('exit-link-btn').href = 'https://www.effectivecpmnetwork.com/pqxbs4r0q?key=906787aaf091812e7824f389f3acf1bc';
             }
         });
         document.addEventListener('click', (e) => {
-            if (e.target.closest('a') && e.target.closest('a').href.includes(window.location.origin)) shown = false;
+            if (e.target.closest('a') && e.target.closest('a').href.includes(window.location.origin)) {
+                shown = false;
+            }
         });
         function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
     </script>
 </body>
-          </html>
+        </html>
