@@ -1,0 +1,8 @@
+{
+  "ad_header": "<!-- Adsterra Header -->",
+  "ad_body": "<!-- In-Body Ad -->",
+  "ad_footer": "<!-- Footer Ad -->",
+  "google_analytics": "<!-- GA4 Tag -->",
+  "google_search_console": "<meta name='google-site-verification' content='YOUR_CODE'>",
+  "exit_direct_link": "https://your-offer-link.com"
+}
