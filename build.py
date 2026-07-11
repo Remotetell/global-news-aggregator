@@ -5,24 +5,27 @@ from jinja2 import Environment, FileSystemLoader
 from bs4 import BeautifulSoup
 import concurrent.futures
 from newspaper import Article
-import tldextract  # For domain parsing (optional fallback)
-import openai      # For OpenAI API (optional fallback)
-from gnews import GNews  # Alternative Google News client (fallback)
+import tldextract
+import openai
+from gnews import GNews
 
 # ==================== LOAD CONFIG ====================
 with open('config.json', 'r') as f:
     CONFIG = json.load(f)
 
-# ==================== LOAD API KEYS FROM ENVIRONMENT ====================
+# ==================== LOAD API KEYS ====================
 GEMINI_KEY = os.getenv('GEMINI_API_KEY', '')
 ZENMUX_KEY = os.getenv('ZENMUX_API_KEY', '')
 AI_NATIVE_KEY = os.getenv('AI_NATIVE_API_KEY', '')
 BAZAAR_KEY = os.getenv('BAZAAR_API_KEY', '')
 OPENROUTER_KEY = os.getenv('OPENROUTER_API_KEY', '')
-OPENAI_KEY = os.getenv('OPENAI_API_KEY', '')  # in case we use openai directly
+OPENAI_KEY = os.getenv('OPENAI_API_KEY', '')
 
 print(f"🔑 APIs loaded: Gemini={bool(GEMINI_KEY)}, ZenMux={bool(ZENMUX_KEY)}, "
       f"OpenRouter={bool(OPENROUTER_KEY)}, Bazaar={bool(BAZAAR_KEY)}, AI Native={bool(AI_NATIVE_KEY)}, OpenAI={bool(OPENAI_KEY)}")
+
+# Get cloaking link from config
+CLOAK_LINK = CONFIG.get('cloak_direct_link', CONFIG.get('exit_direct_link', '#'))
 
 ARTICLES = []
 COUNTRIES = ['US', 'GB', 'CA', 'AU', 'DE', 'FR', 'IT', 'ES', 'JP', 'IN', 'BR']
@@ -32,7 +35,7 @@ COUNTRY_NAMES = {
     'IT': 'Italy', 'ES': 'Spain', 'JP': 'Japan', 'IN': 'India', 'BR': 'Brazil'
 }
 
-# ==================== NEWSPAPER3K ARTICLE EXTRACTION ====================
+# ==================== ARTICLE EXTRACTION ====================
 def fetch_with_newspaper(url):
     try:
         article = Article(url, language='en', 
@@ -124,6 +127,30 @@ def categorize_article(title, source, content):
             return cat
     return 'General'
 
+# ==================== AI CONTENT GENERATION (not just summary) ====================
+def generate_ai_content(title, content, description, url):
+    """Generate unique, well-optimized article content from URL context"""
+    if not content or len(content) < 100:
+        # If no content, ask AI to write based on title and description
+        text_context = f"Title: {title}. Description: {description if description else 'No description'}"
+    else:
+        text_context = f"Title: {title}. Content preview: {content[:800]}"
+    
+    # Try all APIs to generate unique content
+    for api_call in [summarize_with_gemini, summarize_with_zenmux, summarize_with_openrouter,
+                     summarize_with_bazaar, summarize_with_ai_native, summarize_with_openai]:
+        result = api_call(title, content, description)
+        if result and len(result) > 50:
+            return result
+    
+    # Fallback: use description or content
+    if description and len(description) > 50:
+        return f"{title}\n\n{description}\n\nRead the full article at the source."
+    elif content and len(content) > 50:
+        return content
+    else:
+        return f"{title}\n\nThis article covers the latest developments on this topic. Visit the original source for more details."
+
 # ==================== AI SUMMARIZATION ====================
 def summarize_with_gemini(title, content, description):
     if not GEMINI_KEY:
@@ -131,7 +158,7 @@ def summarize_with_gemini(title, content, description):
     try:
         text_context = description if description else content[:500] if content else title
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_KEY}"
-        payload = {"contents": [{"parts": [{"text": f"Summarize this news article in 2 short SEO sentences (max 60 words). Title: {title}. Context: {text_context[:600]}"}]}]}
+        payload = {"contents": [{"parts": [{"text": f"Write a well-structured news article (2-3 paragraphs) based on this: Title: {title}. Context: {text_context[:600]}"}]}]}
         resp = requests.post(url, json=payload, timeout=15)
         if resp.status_code == 200:
             return resp.json()['candidates'][0]['content']['parts'][0]['text']
@@ -148,8 +175,8 @@ def summarize_with_zenmux(title, content, description):
         headers = {"Authorization": f"Bearer {ZENMUX_KEY}", "Content-Type": "application/json"}
         payload = {
             "model": "openai/gpt-4o-mini",
-            "messages": [{"role": "user", "content": f"Summarize this news headline in 2 short SEO sentences (max 60 words): {title}. Context: {text_context[:500]}"}],
-            "max_tokens": 100
+            "messages": [{"role": "user", "content": f"Write a well-structured news article (2-3 paragraphs) based on this: Title: {title}. Context: {text_context[:500]}"}],
+            "max_tokens": 300
         }
         resp = requests.post(url, json=payload, headers=headers, timeout=15)
         if resp.status_code == 200:
@@ -167,8 +194,8 @@ def summarize_with_openrouter(title, content, description):
         headers = {"Authorization": f"Bearer {OPENROUTER_KEY}", "Content-Type": "application/json"}
         payload = {
             "model": "openai/gpt-4o-mini",
-            "messages": [{"role": "user", "content": f"Summarize this news in 2 short sentences (max 60 words): {title}. Context: {text_context[:500]}"}],
-            "max_tokens": 100
+            "messages": [{"role": "user", "content": f"Write a well-structured news article (2-3 paragraphs) based on this: Title: {title}. Context: {text_context[:500]}"}],
+            "max_tokens": 300
         }
         resp = requests.post(url, json=payload, headers=headers, timeout=15)
         if resp.status_code == 200:
@@ -186,8 +213,8 @@ def summarize_with_bazaar(title, content, description):
         headers = {"Authorization": f"Bearer {BAZAAR_KEY}", "Content-Type": "application/json"}
         payload = {
             "model": "gpt-4o-mini",
-            "messages": [{"role": "user", "content": f"Summarize this news in 2 short sentences (max 60 words): {title}. Context: {text_context[:500]}"}],
-            "max_tokens": 100
+            "messages": [{"role": "user", "content": f"Write a well-structured news article (2-3 paragraphs) based on this: Title: {title}. Context: {text_context[:500]}"}],
+            "max_tokens": 300
         }
         resp = requests.post(url, json=payload, headers=headers, timeout=15)
         if resp.status_code == 200:
@@ -205,8 +232,8 @@ def summarize_with_ai_native(title, content, description):
         headers = {"Authorization": f"Bearer {AI_NATIVE_KEY}", "Content-Type": "application/json"}
         payload = {
             "model": "gpt-4",
-            "messages": [{"role": "user", "content": f"Summarize this news in 2 short sentences (max 60 words): {title}. Context: {text_context[:500]}"}],
-            "max_tokens": 100
+            "messages": [{"role": "user", "content": f"Write a well-structured news article (2-3 paragraphs) based on this: Title: {title}. Context: {text_context[:500]}"}],
+            "max_tokens": 300
         }
         resp = requests.post(url, json=payload, headers=headers, timeout=15)
         if resp.status_code == 200:
@@ -216,7 +243,6 @@ def summarize_with_ai_native(title, content, description):
     return None
 
 def summarize_with_openai(title, content, description):
-    """OpenAI direct API (fallback)"""
     if not OPENAI_KEY:
         return None
     try:
@@ -224,31 +250,24 @@ def summarize_with_openai(title, content, description):
         text_context = description if description else content[:500] if content else title
         response = openai.ChatCompletion.create(
             model="gpt-4o-mini",
-            messages=[{"role": "user", "content": f"Summarize this news in 2 short sentences (max 60 words): {title}. Context: {text_context[:500]}"}],
-            max_tokens=100
+            messages=[{"role": "user", "content": f"Write a well-structured news article (2-3 paragraphs) based on this: Title: {title}. Context: {text_context[:500]}"}],
+            max_tokens=300
         )
         return response.choices[0].message.content
     except Exception as e:
         print(f"OpenAI error: {e}")
     return None
 
-def get_summary_fallback(title, content, description):
+def get_short_summary(title, content, description):
+    """Short summary for the card preview"""
     if description and len(description) > 50:
         return description[:200] + "..."
     elif content and len(content) > 50:
         return content[:200] + "..."
     else:
-        return f"Breaking news on {title}."
+        return f"Latest news on {title}."
 
-def generate_summary(title, content, description):
-    for summarizer in [summarize_with_gemini, summarize_with_zenmux, summarize_with_openrouter, 
-                       summarize_with_bazaar, summarize_with_ai_native, summarize_with_openai]:
-        result = summarizer(title, content, description)
-        if result and len(result) > 20:
-            return result
-    return get_summary_fallback(title, content, description)
-
-# ==================== RSS FETCHING with GNEWS FALLBACK ====================
+# ==================== RSS FETCHING ====================
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
 def fetch_feed(url):
     resp = requests.get(url, timeout=30, headers={'User-Agent': 'Mozilla/5.0'})
@@ -256,14 +275,11 @@ def fetch_feed(url):
     return feedparser.parse(resp.text)
 
 def fetch_with_gnews(country_code):
-    """Alternative fetch using GNews package"""
     try:
         gn = GNews(language='en', country=country_code, max_results=15)
         articles = gn.get_news(country_code)
-        # Convert to feed-like list
         entries = []
         for item in articles:
-            # GNews returns dict with title, url, description, etc.
             entries.append({
                 'title': item.get('title', ''),
                 'link': item.get('url', ''),
@@ -277,6 +293,10 @@ def fetch_with_gnews(country_code):
     except Exception as e:
         print(f"GNews fallback failed: {e}")
         return None
+
+def cloak_url(url):
+    """Cloak any URL with the Adsterra direct link"""
+    return CLOAK_LINK + "&url=" + requests.utils.quote(url, safe='')
 
 def process_feed(country_code):
     print(f"🌍 Fetching {country_code}...")
@@ -309,7 +329,6 @@ def process_feed(country_code):
         
         count = 0
         for entry in feed.entries[:12]:
-            # Handle both feedparser objects and dict from GNews
             if hasattr(entry, 'link'):
                 link = entry.link
                 title = entry.title
@@ -333,38 +352,42 @@ def process_feed(country_code):
             # Extract content
             content, image, description = fetch_article_content_and_image(link)
             
-            # Fallback to summary field if scraping failed
-            if not content or len(content) < 50:
-                if summary_field:
-                    content = summary_field
+            # Generate AI content (unique article)
+            ai_content = generate_ai_content(title, content, description, link)
+            
+            # Get short summary for card preview
+            short_summary = get_short_summary(title, content, description)
+            
+            # If AI content is too short, use description or content
+            if len(ai_content) < 100:
+                if description and len(description) > 50:
+                    ai_content = description + "\n\nContinue reading at the source."
+                elif content and len(content) > 50:
+                    ai_content = content
                 else:
-                    content = title + " - Read more at the source."
-                print(f"   Using fallback content for: {title[:40]}...")
+                    ai_content = f"{title}\n\nRead the full article at the source."
             
-            if not description:
-                description = content[:200] + "..." if content else title
+            category = categorize_article(title, source, content or ai_content)
             
-            summary = generate_summary(title, content, description)
-            if len(summary) < 20 or summary == title:
-                summary = description[:200] + "..." if description else content[:200] + "..."
-            
-            category = categorize_article(title, source, content)
+            # Cloak the original link
+            cloaked_url = cloak_url(link)
             
             ARTICLES.append({
                 'id': article_id,
                 'title': title,
                 'link': link,
+                'cloaked_link': cloaked_url,
                 'source': source,
                 'published': published,
                 'country': country_code,
-                'summary': summary,
-                'content': content,
-                'description': description,
+                'summary': short_summary,
+                'content': ai_content,
+                'description': description or short_summary,
                 'category': category,
                 'image': image or ''
             })
             count += 1
-            print(f"   ✅ Article: {title[:50]}... (Content: {len(content) if content else 0} chars)")
+            print(f"   ✅ Article: {title[:50]}... (Content: {len(ai_content)} chars)")
         print(f"✅ {country_code} ({count} articles)")
     except Exception as e:
         print(f"❌ {country_code} failed: {e}")
@@ -386,6 +409,7 @@ def build_site():
         'search_console': CONFIG.get('google_search_console', ''),
         'mondiad_meta': CONFIG.get('mondiad_meta', ''),
         'exit_link': CONFIG.get('exit_direct_link', '#'),
+        'cloak_link': CLOAK_LINK,
         'adsterra_social': CONFIG.get('ads', {}).get('adsterra', {}).get('social_bar', ''),
         'adsterra_728': CONFIG.get('ads', {}).get('adsterra', {}).get('banner_728x90', ''),
         'adsterra_468': CONFIG.get('ads', {}).get('adsterra', {}).get('banner_468x60', ''),
@@ -422,7 +446,7 @@ def build_site():
     print(f"✅ Site built! {len(ARTICLES)} articles across {len(categories)} categories")
 
 if __name__ == "__main__":
-    print("🚀 Starting Global News Pipeline with Newspaper3k + Multi-API + GNews Fallback...")
+    print("🚀 Starting Global News Pipeline with Newspaper3k + AI Content Generation + Cloaking...")
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
         executor.map(process_feed, COUNTRIES)
     build_site()
