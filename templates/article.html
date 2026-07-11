@@ -8,7 +8,6 @@
     {{ mondiad_meta | safe }}
     {{ ga_header | safe }}
     <style>
-        /* same minimal style as base, but we can reuse by extending? For simplicity, copy the main styles */
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; transition: 0.3s; }
         body.dark { background: #121212; color: #e0e0e0; }
@@ -25,6 +24,8 @@
         .article-content img { max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; }
         .article-content p { font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #333; }
         body.dark .article-content p { color: #ccc; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #e8f0fe; color: #1a73e8; }
+        .badge.country { background: #fff3e0; color: #ff6600; }
         .back-link { display: inline-block; margin-top: 20px; color: #1a73e8; text-decoration: none; font-weight: 600; }
         #exit-modal { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 30px; box-shadow: 0 -10px 30px rgba(0,0,0,0.2); z-index: 999999; text-align: center; border-radius: 16px 16px 0 0; }
         body.dark #exit-modal { background: #1e1e1e; }
@@ -32,6 +33,9 @@
         #exit-modal .close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; }
         @media (max-width: 600px) { .article-content h1 { font-size: 22px; } .article-content p { font-size: 16px; } }
     </style>
+    <script>
+        window.EXIT_LINK = "{{ exit_link }}";
+    </script>
 </head>
 <body>
     {{ aads_sticky | safe }}
@@ -48,13 +52,13 @@
                 <span>{{ article.source }}</span> • <span>{{ article.published }}</span> • 
                 <span class="badge">{{ article.category }}</span> • <span class="badge country">📍 {{ article.country }}</span>
             </div>
-            {% if article.image %}
+            {% if article.image and article.image.startswith('http') %}
             <img src="{{ article.image }}" alt="{{ article.title }}" loading="lazy">
             {% else %}
             <img src="https://placehold.co/800x400/1a73e8/white?text=News" alt="placeholder" loading="lazy">
             {% endif %}
             <p>{{ article.content }}</p>
-            <p><a href="{{ article.link }}" target="_blank">View original source</a></p>
+            <p style="font-size:14px;"><a href="{{ article.link }}" target="_blank">📎 View original source</a></p>
             <a href="/" class="back-link">← Back to Home</a>
         </article>
         <div class="ad-container">{{ adsterra_native | safe }}</div>
@@ -63,25 +67,35 @@
             <a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a>
         </footer>
     </div>
+    
     <div id="exit-modal">
         <button class="close" onclick="closeExitModal()">✕</button>
-        <h3>🔥 Exclusive Offer</h3>
-        <a href="#" id="exit-link-btn" target="_blank">👉 Claim Now</a>
+        <h3>🔥 Wait! Exclusive Offer</h3>
+        <p>Don't leave without checking this!</p>
+        <a href="#" id="exit-link-btn" target="_blank" rel="noopener noreferrer">👉 Claim Now</a>
         <br><small><a href="#" onclick="closeExitModal(); return false;">No thanks, stay</a></small>
     </div>
+
     <script defer>
-        let shown = false;
+        let exitShown = false;
         document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0 && !shown) {
-                shown = true;
-                document.getElementById('exit-modal').style.display = 'block';
-                document.getElementById('exit-link-btn').href = '{{ exit_link }}';
+            if (e.clientY < 0 && !exitShown) {
+                exitShown = true;
+                const modal = document.getElementById('exit-modal');
+                const linkBtn = document.getElementById('exit-link-btn');
+                if (modal) modal.style.display = 'block';
+                if (linkBtn) linkBtn.href = window.EXIT_LINK || '#';
             }
         });
         document.addEventListener('click', (e) => {
-            if (e.target.closest('a') && e.target.closest('a').href.includes(window.location.origin)) shown = false;
+            const link = e.target.closest('a');
+            if (link && link.href && link.href.includes(window.location.origin)) {
+                exitShown = false;
+            }
         });
-        function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
+        function closeExitModal() {
+            document.getElementById('exit-modal').style.display = 'none';
+        }
     </script>
 </body>
-  </html>
+            </html>
