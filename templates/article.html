@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ article.summary }}">
     <title>{{ article.title }}</title>
     {{ search_console | safe }}
     {{ mondiad_meta | safe }}
@@ -57,6 +58,7 @@
             {% else %}
             <img src="https://placehold.co/800x400/1a73e8/white?text=News" alt="placeholder" loading="lazy">
             {% endif %}
+            <p><strong>{{ article.summary }}</strong></p>
             <p>{{ article.content }}</p>
             <p style="font-size:14px;"><a href="{{ article.link }}" target="_blank">📎 View original source</a></p>
             <a href="/" class="back-link">← Back to Home</a>
@@ -98,4 +100,4 @@
         }
     </script>
 </body>
-            </html>
+    </html>
