@@ -25,6 +25,8 @@
         .article-content img { max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; }
         .article-content p { font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #333; }
         body.dark .article-content p { color: #ccc; }
+        .article-content .summary-box { background: #f0f7ff; padding: 15px 20px; border-radius: 12px; margin: 15px 0; border-left: 4px solid #1a73e8; }
+        body.dark .article-content .summary-box { background: #1a2a3a; border-left-color: #4a8af4; }
         .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: #e8f0fe; color: #1a73e8; }
         .badge.country { background: #fff3e0; color: #ff6600; }
         .back-link { display: inline-block; margin-top: 20px; color: #1a73e8; text-decoration: none; font-weight: 600; }
@@ -34,9 +36,7 @@
         #exit-modal .close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; }
         @media (max-width: 600px) { .article-content h1 { font-size: 22px; } .article-content p { font-size: 16px; } }
     </style>
-    <script>
-        window.EXIT_LINK = "{{ exit_link }}";
-    </script>
+    <script>window.EXIT_LINK = "{{ exit_link }}";</script>
 </head>
 <body>
     {{ aads_sticky | safe }}
@@ -53,13 +53,20 @@
                 <span>{{ article.source }}</span> • <span>{{ article.published }}</span> • 
                 <span class="badge">{{ article.category }}</span> • <span class="badge country">📍 {{ article.country }}</span>
             </div>
+            
             {% if article.image and article.image.startswith('http') %}
             <img src="{{ article.image }}" alt="{{ article.title }}" loading="lazy">
             {% else %}
-            <img src="https://placehold.co/800x400/1a73e8/white?text=News" alt="placeholder" loading="lazy">
+            <img src="https://placehold.co/800x400/1a73e8/white?text=Global+News" alt="placeholder" loading="lazy">
             {% endif %}
-            <p><strong>{{ article.summary }}</strong></p>
+            
+            <div class="summary-box">
+                <strong>📌 AI Summary:</strong> {{ article.summary }}
+            </div>
+            
+            <!-- Display content even if it's short -->
             <p>{{ article.content }}</p>
+            
             <p style="font-size:14px;"><a href="{{ article.link }}" target="_blank">📎 View original source</a></p>
             <a href="/" class="back-link">← Back to Home</a>
         </article>
@@ -95,9 +102,7 @@
                 exitShown = false;
             }
         });
-        function closeExitModal() {
-            document.getElementById('exit-modal').style.display = 'none';
-        }
+        function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
     </script>
 </body>
-    </html>
+                </html>
