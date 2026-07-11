@@ -12,8 +12,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
-        with:
-          token: ${{ secrets.GH_PAT }}
 
       - name: Setup Python
         uses: actions/setup-python@v6
@@ -21,7 +19,7 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
 
-      - name: Install deps
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run Builder
@@ -29,10 +27,10 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python build.py
 
-      - name: Commit and Push (SKIPS if nothing changed)
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          git config user.name "GitHub Bot"
-          git config user.email "bot@github.com"
-          git add dist/
-          git diff --staged --quiet || git commit -m "Auto-update news [skip ci]"
-          git push
+          npm install -g wrangler
+          wrangler pages deploy dist --project-name=global-news-aggregator --account-id=$CLOUDFLARE_ACCOUNT_ID
