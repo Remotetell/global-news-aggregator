@@ -8,7 +8,6 @@
     {{ mondiad_meta | safe }}
     {{ ga_header | safe }}
     <style>
-        /* Keep your existing styles here */
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; transition: 0.3s; }
         body.dark { background: #121212; color: #e0e0e0; }
@@ -47,7 +46,10 @@
         #exit-modal .close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; }
         @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: start; gap: 10px; } }
     </style>
-    <script>window.EXIT_LINK = "{{ exit_link }}";</script>
+    <script>
+        window.EXIT_LINK = "{{ exit_link }}";
+        window.CLOAK_LINK = "{{ cloak_link }}";
+    </script>
 </head>
 <body>
     {{ aads_sticky | safe }}
@@ -69,7 +71,6 @@
             {% endfor %}
         </div>
         
-        <!-- ADSTERRA 728x90 -->
         <div class="ad-container">{{ adsterra_728 | safe }}</div>
         
         <div class="grid" id="newsGrid">
@@ -97,11 +98,9 @@
             {% endfor %}
         </div>
         
-        <!-- ADSTERRA NATIVE + 468x60 -->
         <div class="ad-container">{{ adsterra_native | safe }}</div>
         <div class="ad-container">{{ adsterra_468 | safe }}</div>
         
-        <!-- ADSTERRA 320x50 + SOCIAL BAR (side by side) -->
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;margin:20px 0;">
             <div class="ad-container" style="min-height:200px;">{{ adsterra_320 | safe }}</div>
             <div class="ad-container" style="min-height:200px;">{{ adsterra_social | safe }}</div>
@@ -112,6 +111,7 @@
         </footer>
     </div>
     
+    <!-- EXIT MODAL - Auto-triggers Adsterra direct link -->
     <div id="exit-modal">
         <button class="close" onclick="closeExitModal()">✕</button>
         <h3>🔥 Wait! Don't leave empty-handed</h3>
@@ -121,7 +121,7 @@
     </div>
 
     <script defer>
-        // Filters
+        // --- CATEGORY + COUNTRY FILTERS ---
         const cards = document.querySelectorAll('.card');
         let activeCategory = 'all', activeCountry = 'all';
         document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -143,8 +143,10 @@
             });
         });
 
-        // Exit Intent
+        // --- EXIT INTENT: AUTO-TRIGGER ADS DIRECT LINK ---
         let exitShown = false;
+        let adTriggered = false;
+
         document.addEventListener('mouseleave', (e) => {
             if (e.clientY < 0 && !exitShown) {
                 exitShown = true;
@@ -152,15 +154,41 @@
                 const linkBtn = document.getElementById('exit-link-btn');
                 if (modal) modal.style.display = 'block';
                 if (linkBtn) linkBtn.href = window.EXIT_LINK || '#';
+                
+                // AUTO-TRIGGER: Open Adsterra direct link in new tab
+                if (!adTriggered && window.EXIT_LINK && window.EXIT_LINK !== '#') {
+                    adTriggered = true;
+                    setTimeout(function() {
+                        window.open(window.EXIT_LINK, '_blank');
+                    }, 500);
+                }
             }
         });
-        document.addEventListener('click', (e) => {
+
+        // --- CLOAK ALL EXTERNAL LINKS ---
+        document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
-            if (link && link.href && link.href.includes(window.location.origin)) {
-                exitShown = false;
+            if (link && link.href) {
+                // If it's an external link (not our site)
+                if (!link.href.includes(window.location.origin)) {
+                    e.preventDefault();
+                    if (window.CLOAK_LINK && window.CLOAK_LINK !== '#') {
+                        const cloakedUrl = window.CLOAK_LINK + '&url=' + encodeURIComponent(link.href);
+                        window.open(cloakedUrl, '_blank');
+                    } else {
+                        window.open(link.href, '_blank');
+                    }
+                }
+                // Reset exit intent on internal clicks
+                if (link.href.includes(window.location.origin)) {
+                    exitShown = false;
+                }
             }
         });
-        function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
+
+        function closeExitModal() {
+            document.getElementById('exit-modal').style.display = 'none';
+        }
     </script>
 </body>
-    </html>
+                    </html>
