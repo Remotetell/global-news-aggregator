@@ -136,7 +136,6 @@
         // --- EXIT INTENT (Direct Link) ---
         let exitShown = false;
         document.addEventListener('mouseleave', (e) => {
-            // Trigger when mouse moves to the top of the screen (closing tab)
             if (e.clientY < 0 && !exitShown) {
                 exitShown = true;
                 const modal = document.getElementById('exit-modal');
@@ -146,7 +145,6 @@
             }
         });
 
-        // Reset if user clicks internal navigation
         document.addEventListener('click', (e) => {
             const link = e.target.closest('a');
             if (link && link.href && link.href.includes(window.location.origin)) {
