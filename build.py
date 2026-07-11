@@ -34,37 +34,44 @@ def categorize_article(title, source):
             return cat
     return 'General'
 
-# Extract full article content and image
+# Robust article content + image scraper
 def fetch_article_content_and_image(url):
     try:
-        resp = requests.get(url, timeout=10, headers={'User-Agent': 'Mozilla/5.0'})
+        resp = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
         if resp.status_code != 200:
             return None, None
         soup = BeautifulSoup(resp.text, 'lxml')
         # Remove scripts, styles, nav, footer, etc.
-        for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside']):
+        for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript']):
             tag.decompose()
-        # Try to find article body
-        article = soup.find('article') or soup.find('main') or soup.find('div', class_='content') or soup.find('div', class_='post')
-        if article:
-            paragraphs = article.find_all('p')
-            content = ' '.join([p.get_text(strip=True) for p in paragraphs])
-            if len(content) > 200:
-                # Get image
-                og_image = soup.find('meta', property='og:image')
-                if og_image and og_image.get('content'):
-                    image = og_image.get('content')
-                else:
-                    image = None
-                return content, image
+        # Try multiple selectors for article body
+        content = None
+        for selector in ['article', 'main', '.content', '.post', '.entry-content', '.article-body', '.story-body']:
+            article = soup.find('article') or soup.find('main') or soup.find('div', class_=selector.replace('.', ''))
+            if article:
+                paragraphs = article.find_all('p')
+                raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
+                if len(raw) > 200:
+                    content = raw
+                    break
         # Fallback: all paragraphs
-        paragraphs = soup.find_all('p')
-        content = ' '.join([p.get_text(strip=True) for p in paragraphs])
-        if len(content) > 200:
-            og_image = soup.find('meta', property='og:image')
-            image = og_image.get('content') if og_image else None
-            return content, image
-        return None, None
+        if not content:
+            paragraphs = soup.find_all('p')
+            raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
+            if len(raw) > 200:
+                content = raw
+        # Get image
+        image = None
+        og_image = soup.find('meta', property='og:image')
+        if og_image and og_image.get('content'):
+            image = og_image.get('content')
+        else:
+            # fallback: find first large image
+            img = soup.find('img')
+            if img and img.get('src'):
+                if img.get('src').startswith('http'):
+                    image = img.get('src')
+        return content, image
     except Exception as e:
         print(f"Scrape error: {e}")
         return None, None
@@ -72,7 +79,7 @@ def fetch_article_content_and_image(url):
 # Gemini summary (with fallback)
 def get_gemini_summary(title, content):
     if not GEMINI_KEY:
-        return content[:150] + "..." if content else f"Latest news on {title}."
+        return content[:200] + "..." if content else f"Latest news on {title}."
     try:
         text = f"Summarize this article in 2 short SEO sentences (max 60 words): Title: {title}. Content: {content[:500]}"
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_KEY}"
@@ -82,7 +89,7 @@ def get_gemini_summary(title, content):
             return resp.json()['candidates'][0]['content']['parts'][0]['text']
     except Exception as e:
         print(f"Gemini error: {e}")
-    return content[:150] + "..." if content else f"Breaking news on {title}."
+    return content[:200] + "..." if content else f"Breaking news on {title}."
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
 def fetch_feed(url):
@@ -96,17 +103,25 @@ def process_feed(country_code):
         url = f"https://news.google.com/rss?hl=en-{country_code}&gl={country_code}&ceid={country_code}:en"
         feed = fetch_feed(url)
         count = 0
-        for entry in feed.entries[:10]:
+        for entry in feed.entries[:12]:
             article_id = hashlib.md5(entry.link.encode()).hexdigest()
             if any(a['id'] == article_id for a in ARTICLES):
                 continue
-            # Scrape content and image
+            
+            # Try to get full content and image
             content, image = fetch_article_content_and_image(entry.link)
+            
+            # If content scraping fails, use the entry summary or title
             if not content:
-                # If scraping fails, skip
-                continue
+                if hasattr(entry, 'summary'):
+                    content = entry.summary
+                else:
+                    content = entry.title + " - Read the full article at the source."
+            
+            # Get summary via Gemini (or fallback)
             summary = get_gemini_summary(entry.title, content)
             category = categorize_article(entry.title, getattr(entry, 'source', {}).get('title', ''))
+            
             ARTICLES.append({
                 'id': article_id,
                 'title': entry.title,
@@ -117,7 +132,7 @@ def process_feed(country_code):
                 'summary': summary,
                 'content': content,
                 'category': category,
-                'image': image or ''  # will fallback to placeholder in template
+                'image': image or ''  # fallback handled in template
             })
             count += 1
         print(f"✅ {country_code} ({count} articles)")
@@ -129,26 +144,10 @@ def build_site():
     os.makedirs('dist', exist_ok=True)
     categories = sorted(set(a['category'] for a in ARTICLES))
     
-    # If no articles, create demo articles
-    if not ARTICLES:
-        for i in range(20):
-            ARTICLES.append({
-                'id': str(i),
-                'title': f"Sample Article {i+1}",
-                'link': '#',
-                'source': 'Demo',
-                'published': 'Just now',
-                'country': 'US',
-                'summary': 'This is a demo article. Real content will appear when RSS feeds are reachable.',
-                'content': 'This is the full article content. It will be replaced with real news once the RSS feed is fetched successfully.',
-                'category': ['Sports','Tech','Finance','Health','Entertainment'][i%5],
-                'image': 'https://placehold.co/400x200/1a73e8/white?text=News'
-            })
-
     # Shared context for all pages
     context = {
         'articles': ARTICLES,
-        'categories': categories,
+        'categories': categories if categories else ['General'],
         'countries': COUNTRIES,
         'country_names': COUNTRY_NAMES,
         'ads': CONFIG.get('ads', {}),
@@ -195,7 +194,7 @@ def build_site():
     with open('dist/sitemap.xml', 'w') as f:
         f.write(sitemap)
 
-    print(f"✅ Site built! {len(ARTICLES)} articles across {len(categories)} categories")
+    print(f"✅ Site built! {len(ARTICLES)} real articles across {len(categories)} categories")
 
 if __name__ == "__main__":
     print("🚀 Starting Global News Pipeline...")
