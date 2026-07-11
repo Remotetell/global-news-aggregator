@@ -24,7 +24,12 @@ jobs:
 
       - name: Run Builder
         env:
+          # ===== API KEYS (Loaded from GitHub Secrets) =====
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ZENMUX_API_KEY: ${{ secrets.ZENMUX_API_KEY }}
+          AI_NATIVE_API_KEY: ${{ secrets.AI_NATIVE_API_KEY }}
+          BAZAAR_API_KEY: ${{ secrets.BAZAAR_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: python build.py
 
       - name: Deploy to Cloudflare Pages
