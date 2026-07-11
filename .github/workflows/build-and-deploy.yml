@@ -19,12 +19,16 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
 
-      - name: Install dependencies
+      - name: Install system dependencies (for newspaper3k)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-dev libxslt1-dev python3-dev
+
+      - name: Install Python dependencies
         run: pip install -r requirements.txt
 
       - name: Run Builder
         env:
-          # ===== API KEYS (Loaded from GitHub Secrets) =====
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           ZENMUX_API_KEY: ${{ secrets.ZENMUX_API_KEY }}
           AI_NATIVE_API_KEY: ${{ secrets.AI_NATIVE_API_KEY }}
