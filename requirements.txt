@@ -6,3 +6,5 @@ beautifulsoup4==4.12.3
 lxml==5.1.0
 gnews>=0.8.0
 openai>=1.0.0
+newspaper3k==0.2.8
+tldextract>=5.0.0
