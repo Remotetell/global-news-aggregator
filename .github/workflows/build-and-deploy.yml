@@ -30,7 +30,6 @@ jobs:
       - name: Deploy to Cloudflare Pages
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           npm install -g wrangler
-          wrangler pages deploy dist --project-name=global-news-aggregator --account-id=$CLOUDFLARE_ACCOUNT_ID
+          wrangler pages deploy dist --project-name=global-news-aggregator
