@@ -8,7 +8,6 @@
     {{ mondiad_meta | safe }}
     {{ ga_header | safe }}
     <style>
-        /* (same as before, keep it minimal) */
         * { margin:0; padding:0; box-sizing:border-box; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8f9fa; transition: 0.3s; }
         body.dark { background: #121212; color: #e0e0e0; }
@@ -47,6 +46,9 @@
         #exit-modal .close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; }
         @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } .header { flex-direction: column; align-items: start; gap: 10px; } }
     </style>
+    <script>
+        window.EXIT_LINK = "{{ exit_link }}";
+    </script>
 </head>
 <body>
     {{ aads_sticky | safe }}
@@ -71,7 +73,7 @@
         <div class="grid" id="newsGrid">
             {% for a in articles %}
             <div class="card" data-country="{{ a.country }}" data-category="{{ a.category }}">
-                {% if a.image %}
+                {% if a.image and a.image.startswith('http') %}
                 <img src="{{ a.image }}" alt="{{ a.title }}" loading="lazy" width="400" height="200">
                 {% else %}
                 <img src="https://placehold.co/400x200/1a73e8/white?text=News" alt="placeholder" loading="lazy" width="400" height="200">
@@ -98,15 +100,18 @@
             <a href="/about.html">About</a> | <a href="/privacy.html">Privacy</a>
         </footer>
     </div>
+    
+    <!-- EXIT MODAL -->
     <div id="exit-modal">
         <button class="close" onclick="closeExitModal()">✕</button>
-        <h3>🔥 Exclusive Offer</h3>
-        <p>Don't leave without checking this!</p>
-        <a href="#" id="exit-link-btn" target="_blank">👉 Claim Now</a>
-        <br><small><a href="#" onclick="closeExitModal(); return false;">No thanks, stay</a></small>
+        <h3>🔥 Wait! Don't leave empty-handed</h3>
+        <p>Check out this exclusive offer before you go.</p>
+        <a href="#" id="exit-link-btn" target="_blank" rel="noopener noreferrer">👉 Claim Offer</a>
+        <br><small><a href="#" onclick="closeExitModal(); return false;">No thanks, stay on site</a></small>
     </div>
+
     <script defer>
-        // --- filters ---
+        // --- CATEGORY + COUNTRY FILTERS ---
         const cards = document.querySelectorAll('.card');
         let activeCategory = 'all', activeCountry = 'all';
         document.querySelectorAll('.cat-btn').forEach(btn => {
@@ -127,19 +132,31 @@
                 });
             });
         });
-        // --- exit intent ---
-        let shown = false;
+
+        // --- EXIT INTENT (Direct Link) ---
+        let exitShown = false;
         document.addEventListener('mouseleave', (e) => {
-            if (e.clientY < 0 && !shown) {
-                shown = true;
-                document.getElementById('exit-modal').style.display = 'block';
-                document.getElementById('exit-link-btn').href = '{{ exit_link }}';
+            // Trigger when mouse moves to the top of the screen (closing tab)
+            if (e.clientY < 0 && !exitShown) {
+                exitShown = true;
+                const modal = document.getElementById('exit-modal');
+                const linkBtn = document.getElementById('exit-link-btn');
+                if (modal) modal.style.display = 'block';
+                if (linkBtn) linkBtn.href = window.EXIT_LINK || '#';
             }
         });
+
+        // Reset if user clicks internal navigation
         document.addEventListener('click', (e) => {
-            if (e.target.closest('a') && e.target.closest('a').href.includes(window.location.origin)) shown = false;
+            const link = e.target.closest('a');
+            if (link && link.href && link.href.includes(window.location.origin)) {
+                exitShown = false;
+            }
         });
-        function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
+
+        function closeExitModal() {
+            document.getElementById('exit-modal').style.display = 'none';
+        }
     </script>
 </body>
-                </html>
+    </html>
