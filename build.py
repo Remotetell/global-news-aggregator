@@ -9,14 +9,13 @@ import concurrent.futures
 with open('config.json', 'r') as f:
     CONFIG = json.load(f)
 
-# ==================== LOAD API KEYS FROM ENVIRONMENT (GitHub Secrets) ====================
+# ==================== LOAD API KEYS FROM ENVIRONMENT ====================
 GEMINI_KEY = os.getenv('GEMINI_API_KEY', '')
 ZENMUX_KEY = os.getenv('ZENMUX_API_KEY', '')
 AI_NATIVE_KEY = os.getenv('AI_NATIVE_API_KEY', '')
 BAZAAR_KEY = os.getenv('BAZAAR_API_KEY', '')
 OPENROUTER_KEY = os.getenv('OPENROUTER_API_KEY', '')
 
-# Log which APIs are available
 print(f"🔑 APIs loaded: Gemini={bool(GEMINI_KEY)}, ZenMux={bool(ZENMUX_KEY)}, "
       f"OpenRouter={bool(OPENROUTER_KEY)}, Bazaar={bool(BAZAAR_KEY)}, AI Native={bool(AI_NATIVE_KEY)}")
 
@@ -27,6 +26,18 @@ COUNTRY_NAMES = {
     'AU': 'Australia', 'DE': 'Germany', 'FR': 'France',
     'IT': 'Italy', 'ES': 'Spain', 'JP': 'Japan', 'IN': 'India', 'BR': 'Brazil'
 }
+
+# ==================== USER-AGENTS FOR ROTATION ====================
+USER_AGENTS = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/121.0',
+    'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15'
+]
+
+def get_random_headers():
+    return {'User-Agent': USER_AGENTS[hash(time.time()) % len(USER_AGENTS)]}
 
 # ==================== CATEGORY MAPPING ====================
 def categorize_article(title, source, content):
@@ -45,62 +56,95 @@ def categorize_article(title, source, content):
             return cat
     return 'General'
 
-# ==================== ARTICLE CONTENT FETCHING ====================
+# ==================== IMPROVED ARTICLE CONTENT SCRAPING ====================
 def fetch_article_content_and_image(url):
-    try:
-        resp = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
-        if resp.status_code != 200:
-            return None, None, None
-        soup = BeautifulSoup(resp.text, 'lxml')
-        for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript', 'iframe']):
-            tag.decompose()
-        
-        description = None
-        og_desc = soup.find('meta', property='og:description')
-        if og_desc and og_desc.get('content'):
-            description = og_desc.get('content')
-        else:
-            meta_desc = soup.find('meta', attrs={'name': 'description'})
-            if meta_desc and meta_desc.get('content'):
-                description = meta_desc.get('content')
-        
-        content = None
-        article_selectors = ['article', 'main', '.content', '.post', '.entry-content', '.article-body', '.story-body']
-        for selector in article_selectors:
-            article = soup.find(selector) or soup.find('div', class_=selector.replace('.', ''))
-            if article:
-                paragraphs = article.find_all('p')
-                raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
-                if len(raw) > 200:
-                    content = raw
-                    break
-        
-        if not content:
-            paragraphs = soup.find_all('p')
-            raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
-            if len(raw) > 200:
-                content = raw
-        
-        if (not content or len(content) < 100) and description and len(description) > 50:
-            content = description + " " + (content if content else "")
-        
-        image = None
-        og_image = soup.find('meta', property='og:image')
-        if og_image and og_image.get('content'):
-            image = og_image.get('content')
-        else:
-            for img in soup.find_all('img'):
-                src = img.get('src') or img.get('data-src')
-                if src and src.startswith('http') and 'logo' not in src.lower() and 'icon' not in src.lower():
-                    image = src
-                    break
-        
-        return content, image, description
-    except Exception as e:
-        print(f"Scrape error: {e}")
-        return None, None, None
+    """Fetch full article content with multiple fallback strategies"""
+    
+    # Try multiple user-agents
+    for ua in USER_AGENTS[:3]:  # Try 3 different UAs
+        try:
+            headers = {'User-Agent': ua, 'Accept-Language': 'en-US,en;q=0.9'}
+            resp = requests.get(url, timeout=15, headers=headers)
+            if resp.status_code == 200:
+                soup = BeautifulSoup(resp.text, 'lxml')
+                
+                # Remove junk
+                for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript', 'iframe', 'form']):
+                    tag.decompose()
+                
+                # === GET DESCRIPTION ===
+                description = None
+                og_desc = soup.find('meta', property='og:description')
+                if og_desc and og_desc.get('content'):
+                    description = og_desc.get('content')
+                else:
+                    meta_desc = soup.find('meta', attrs={'name': 'description'})
+                    if meta_desc and meta_desc.get('content'):
+                        description = meta_desc.get('content')
+                
+                # === GET CONTENT ===
+                content = None
+                # Try multiple selectors
+                selectors = [
+                    'article', 'main', '.article-body', '.story-body', '.post-content',
+                    '.entry-content', '.content', '.post', '.article-content', '.body-text',
+                    '.article__body', '.story__content', '.main-content', '.article-text'
+                ]
+                
+                for selector in selectors:
+                    try:
+                        element = soup.select_one(selector)
+                        if not element:
+                            element = soup.find('div', class_=selector.replace('.', ''))
+                        if element:
+                            paragraphs = element.find_all('p')
+                            raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
+                            if len(raw) > 200:
+                                content = raw
+                                break
+                    except:
+                        continue
+                
+                # === FALLBACK: ALL PARAGRAPHS ===
+                if not content or len(content) < 100:
+                    paragraphs = soup.find_all('p')
+                    raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
+                    # Remove common junk phrases
+                    junk_phrases = ['cookie', 'privacy', 'subscribe', 'newsletter', 'advertisement', 'sponsored']
+                    if not any(junk in raw.lower() for junk in junk_phrases) and len(raw) > 200:
+                        content = raw
+                
+                # === GET IMAGE ===
+                image = None
+                og_image = soup.find('meta', property='og:image')
+                if og_image and og_image.get('content'):
+                    image = og_image.get('content')
+                else:
+                    # Find first large image
+                    for img in soup.find_all('img'):
+                        src = img.get('src') or img.get('data-src')
+                        if src and src.startswith('http'):
+                            # Skip small icons/logos
+                            width = img.get('width') or ''
+                            height = img.get('height') or ''
+                            if not width or (width.isdigit() and int(width) > 100):
+                                if 'logo' not in src.lower() and 'icon' not in src.lower():
+                                    image = src
+                                    break
+                
+                # If we got content, return it
+                if content and len(content) > 100:
+                    return content, image, description
+                
+        except Exception as e:
+            print(f"Scrape attempt with {ua[:30]}... failed: {e}")
+            continue
+    
+    # === FINAL FALLBACK: If all scraping fails ===
+    print(f"⚠️ All scraping attempts failed for {url[:50]}...")
+    return None, None, None
 
-# ==================== MULTI-API SUMMARIZATION ====================
+# ==================== AI SUMMARIZATION (Multi-API Fallback) ====================
 def summarize_with_gemini(title, content, description):
     if not GEMINI_KEY:
         return None
@@ -241,13 +285,21 @@ def process_feed(country_code):
             if any(a['id'] == article_id for a in ARTICLES):
                 continue
             
+            # Try to scrape content
             content, image, description = fetch_article_content_and_image(entry.link)
+            
+            # If scraping failed, use RSS fields
             if not content:
-                content = entry.summary if hasattr(entry, 'summary') else entry.title
+                if hasattr(entry, 'summary'):
+                    content = entry.summary
+                else:
+                    content = entry.title
             if not description:
                 description = content[:200] + "..." if content else entry.title
             
+            # Generate AI summary
             summary = generate_summary(entry.title, content, description)
+            
             category = categorize_article(entry.title, getattr(entry, 'source', {}).get('title', ''), content)
             
             ARTICLES.append({
@@ -258,7 +310,7 @@ def process_feed(country_code):
                 'published': getattr(entry, 'published', 'Just now'),
                 'country': country_code,
                 'summary': summary,
-                'content': content,
+                'content': content if content else entry.title,
                 'description': description,
                 'category': category,
                 'image': image or ''
