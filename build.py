@@ -4,6 +4,7 @@ from tenacity import retry, stop_after_attempt, wait_exponential
 from jinja2 import Environment, FileSystemLoader
 from bs4 import BeautifulSoup
 import concurrent.futures
+import re
 
 with open('config.json', 'r') as f:
     CONFIG = json.load(f)
@@ -17,7 +18,7 @@ COUNTRY_NAMES = {
     'IT': 'Italy', 'ES': 'Spain', 'JP': 'Japan', 'IN': 'India', 'BR': 'Brazil'
 }
 
-# Category mapping (improved)
+# Category mapping
 def categorize_article(title, source):
     text = (title + " " + source).lower()
     cat_map = {
@@ -39,57 +40,94 @@ def fetch_article_content_and_image(url):
     try:
         resp = requests.get(url, timeout=15, headers={'User-Agent': 'Mozilla/5.0'})
         if resp.status_code != 200:
-            return None, None
+            return None, None, None
         soup = BeautifulSoup(resp.text, 'lxml')
-        # Remove scripts, styles, nav, footer, etc.
-        for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript']):
+        
+        # Remove junk
+        for tag in soup(['script', 'style', 'nav', 'header', 'footer', 'aside', 'noscript', 'iframe']):
             tag.decompose()
-        # Try multiple selectors for article body
+        
+        # Get title (if different from RSS)
+        og_title = soup.find('meta', property='og:title')
+        title = og_title.get('content') if og_title else None
+        
+        # Get description/ excerpt
+        description = None
+        og_desc = soup.find('meta', property='og:description')
+        if og_desc and og_desc.get('content'):
+            description = og_desc.get('content')
+        else:
+            meta_desc = soup.find('meta', attrs={'name': 'description'})
+            if meta_desc and meta_desc.get('content'):
+                description = meta_desc.get('content')
+        
+        # Get content
         content = None
-        for selector in ['article', 'main', '.content', '.post', '.entry-content', '.article-body', '.story-body']:
-            article = soup.find('article') or soup.find('main') or soup.find('div', class_=selector.replace('.', ''))
+        article_selectors = ['article', 'main', '.content', '.post', '.entry-content', '.article-body', '.story-body', '.post-content', '.article-content']
+        for selector in article_selectors:
+            article = soup.find(selector) or soup.find('div', class_=selector.replace('.', ''))
             if article:
                 paragraphs = article.find_all('p')
                 raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
                 if len(raw) > 200:
                     content = raw
                     break
+        
         # Fallback: all paragraphs
         if not content:
             paragraphs = soup.find_all('p')
             raw = ' '.join([p.get_text(strip=True) for p in paragraphs])
             if len(raw) > 200:
                 content = raw
-        # Get image
+        
+        # If content is too short, use description as content
+        if (not content or len(content) < 100) and description and len(description) > 50:
+            content = description + " " + content if content else description
+        
+        # Get featured image
         image = None
         og_image = soup.find('meta', property='og:image')
         if og_image and og_image.get('content'):
             image = og_image.get('content')
         else:
-            # fallback: find first large image
-            img = soup.find('img')
-            if img and img.get('src'):
-                if img.get('src').startswith('http'):
-                    image = img.get('src')
-        return content, image
+            # Find first large image
+            for img in soup.find_all('img'):
+                src = img.get('src') or img.get('data-src')
+                if src and src.startswith('http') and 'logo' not in src.lower() and 'icon' not in src.lower():
+                    image = src
+                    break
+        
+        return content, image, description
     except Exception as e:
         print(f"Scrape error: {e}")
-        return None, None
+        return None, None, None
 
-# Gemini summary (with fallback)
-def get_gemini_summary(title, content):
+# Gemini summary (now uses full content context)
+def get_gemini_summary(title, content, description):
     if not GEMINI_KEY:
-        return content[:200] + "..." if content else f"Latest news on {title}."
+        return description[:200] + "..." if description else content[:200] + "..." if content else f"Latest news on {title}."
+    
     try:
-        text = f"Summarize this article in 2 short SEO sentences (max 60 words): Title: {title}. Content: {content[:500]}"
+        # Use description and content together for better context
+        text_context = description if description else content[:500] if content else title
+        text = f"Summarize this news article in 2 short SEO-friendly sentences (max 60 words total). Title: {title}. Context: {text_context[:600]}"
+        
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={GEMINI_KEY}"
         payload = {"contents": [{"parts": [{"text": text}]}]}
         resp = requests.post(url, json=payload, timeout=15)
         if resp.status_code == 200:
-            return resp.json()['candidates'][0]['content']['parts'][0]['text']
+            result = resp.json()['candidates'][0]['content']['parts'][0]['text']
+            return result
     except Exception as e:
         print(f"Gemini error: {e}")
-    return content[:200] + "..." if content else f"Breaking news on {title}."
+    
+    # Fallback
+    if description:
+        return description[:200] + "..."
+    elif content:
+        return content[:200] + "..."
+    else:
+        return f"Breaking news on {title}."
 
 @retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
 def fetch_feed(url):
@@ -108,18 +146,22 @@ def process_feed(country_code):
             if any(a['id'] == article_id for a in ARTICLES):
                 continue
             
-            # Try to get full content and image
-            content, image = fetch_article_content_and_image(entry.link)
+            # Get full content, image, description from source
+            content, image, description = fetch_article_content_and_image(entry.link)
             
-            # If content scraping fails, use the entry summary or title
+            # If scraping fails, use RSS fields
             if not content:
-                if hasattr(entry, 'summary'):
-                    content = entry.summary
-                else:
-                    content = entry.title + " - Read the full article at the source."
+                content = entry.summary if hasattr(entry, 'summary') else entry.title
+            if not description:
+                description = content[:200] + "..." if content else entry.title
             
-            # Get summary via Gemini (or fallback)
-            summary = get_gemini_summary(entry.title, content)
+            # Generate Gemini summary (with context)
+            summary = get_gemini_summary(entry.title, content, description)
+            
+            # If Gemini returns nothing, use description
+            if not summary or len(summary) < 10:
+                summary = description[:200] + "..." if description else content[:200] + "..."
+            
             category = categorize_article(entry.title, getattr(entry, 'source', {}).get('title', ''))
             
             ARTICLES.append({
@@ -131,6 +173,7 @@ def process_feed(country_code):
                 'country': country_code,
                 'summary': summary,
                 'content': content,
+                'description': description,
                 'category': category,
                 'image': image or ''  # fallback handled in template
             })
@@ -142,12 +185,11 @@ def process_feed(country_code):
 def build_site():
     env = Environment(loader=FileSystemLoader('templates'))
     os.makedirs('dist', exist_ok=True)
-    categories = sorted(set(a['category'] for a in ARTICLES))
+    categories = sorted(set(a['category'] for a in ARTICLES)) if ARTICLES else ['General']
     
-    # Shared context for all pages
     context = {
         'articles': ARTICLES,
-        'categories': categories if categories else ['General'],
+        'categories': categories,
         'countries': COUNTRIES,
         'country_names': COUNTRY_NAMES,
         'ads': CONFIG.get('ads', {}),
