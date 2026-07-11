@@ -20,7 +20,7 @@
         body.dark .ad-container { background: #2a2a2a; }
         .article-content { background: #fff; padding: 30px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
         body.dark .article-content { background: #1e1e1e; box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
-        .article-content h1 { font-size: 28px; margin-bottom: 10px; }
+        .article-content h1 { font-size: 28px; margin-bottom: 10px; line-height: 1.3; }
         .article-content .meta { font-size: 14px; color: #999; margin-bottom: 20px; }
         .article-content img { max-width: 100%; height: auto; border-radius: 12px; margin: 20px 0; }
         .article-content p { font-size: 18px; line-height: 1.8; margin-bottom: 20px; color: #333; }
@@ -36,7 +36,10 @@
         #exit-modal .close { float: right; background: none; border: none; font-size: 20px; cursor: pointer; }
         @media (max-width: 600px) { .article-content h1 { font-size: 22px; } .article-content p { font-size: 16px; } }
     </style>
-    <script>window.EXIT_LINK = "{{ exit_link }}";</script>
+    <script>
+        window.EXIT_LINK = "{{ exit_link }}";
+        window.CLOAK_LINK = "{{ cloak_link }}";
+    </script>
 </head>
 <body>
     {{ aads_sticky | safe }}
@@ -64,10 +67,15 @@
                 <strong>📌 AI Summary:</strong> {{ article.summary }}
             </div>
             
-            <!-- Display content even if it's short -->
-            <p>{{ article.content }}</p>
+            <!-- FULL AI-GENERATED ARTICLE CONTENT -->
+            {% for paragraph in article.content.split('\n\n') %}
+                <p>{{ paragraph }}</p>
+            {% endfor %}
             
-            <p style="font-size:14px;"><a href="{{ article.link }}" target="_blank">📎 View original source</a></p>
+            <!-- CLOAKED SOURCE LINK (loads Adsterra ad) -->
+            <p style="font-size:14px; margin-top: 20px;">
+                <a href="{{ article.cloaked_link }}" target="_blank" class="cloaked-source">📎 View original source (Sponsored)</a>
+            </p>
             <a href="/" class="back-link">← Back to Home</a>
         </article>
         <div class="ad-container">{{ adsterra_native | safe }}</div>
@@ -86,7 +94,10 @@
     </div>
 
     <script defer>
+        // --- EXIT INTENT: AUTO-TRIGGER ADS ---
         let exitShown = false;
+        let adTriggered = false;
+
         document.addEventListener('mouseleave', (e) => {
             if (e.clientY < 0 && !exitShown) {
                 exitShown = true;
@@ -94,15 +105,37 @@
                 const linkBtn = document.getElementById('exit-link-btn');
                 if (modal) modal.style.display = 'block';
                 if (linkBtn) linkBtn.href = window.EXIT_LINK || '#';
+                
+                if (!adTriggered && window.EXIT_LINK && window.EXIT_LINK !== '#') {
+                    adTriggered = true;
+                    setTimeout(function() {
+                        window.open(window.EXIT_LINK, '_blank');
+                    }, 500);
+                }
             }
         });
-        document.addEventListener('click', (e) => {
+
+        document.addEventListener('click', function(e) {
             const link = e.target.closest('a');
-            if (link && link.href && link.href.includes(window.location.origin)) {
-                exitShown = false;
+            if (link && link.href) {
+                if (!link.href.includes(window.location.origin)) {
+                    e.preventDefault();
+                    if (window.CLOAK_LINK && window.CLOAK_LINK !== '#') {
+                        const cloakedUrl = window.CLOAK_LINK + '&url=' + encodeURIComponent(link.href);
+                        window.open(cloakedUrl, '_blank');
+                    } else {
+                        window.open(link.href, '_blank');
+                    }
+                }
+                if (link.href.includes(window.location.origin)) {
+                    exitShown = false;
+                }
             }
         });
-        function closeExitModal() { document.getElementById('exit-modal').style.display = 'none'; }
+
+        function closeExitModal() {
+            document.getElementById('exit-modal').style.display = 'none';
+        }
     </script>
 </body>
-                </html>
+    </html>
