@@ -3,10 +3,12 @@
     "mondiad": {
       "enabled": true,
       "client_id": "P7SRVSMJYMB2I7SXZPLKGVLXNHS4UESBISS2P45CCDKHFG52MAEKGV2WXAYIYVTB",
-      "client_secret": "6Y43HAUSYUG5FKB2FWSTC2BUJMKSNAINFUKTEYBZPY37NDEOLD4V2OXCHS444RRK"
+      "client_secret": "6Y43HAUSYUG5FKB2FWSTC2BUJMKSNAINFUKTEYBZPY37NDEOLD4V2OXCHS444RRK",
+      "interstitial": "<script async src='https://ss.mrmnd.com/interstitial.js' data-mndintid='b258a847-241e-4134-b5f2-2ee56bf1d6ab'></script>",
+      "dynamic": "<script async src='https://ss.mrmnd.com/dynamic.js' data-mnddynid='e8724078-1be1-4eb4-8031-2e95b787a4fb'></script>"
     },
     "adsterra": {
-      "direct_link": "https://www.effectivecpmnetwork.com/iiuhf0b3d6?key=1c1ba50352ab2f0906152960b6d10d77",
+      "direct_link": "https://www.effectivecpmnetwork.com/pqxbs4r0q?key=906787aaf091812e7824f389f3acf1bc",
       "smart_link": "https://www.effectivecpmnetwork.com/iiuhf0b3d6?key=1c1ba50352ab2f0906152960b6d10d77",
       "social_bar": "<script src='https://pl30315484.effectivecpmnetwork.com/69/53/2c/69532c2740f1aaf945d1867d476d87cc.js'></script>",
       "banner_728x90": "<script>atOptions = {'key' : 'fe70e3d6b0cc5f0a036ef9833ca34d2a','format' : 'iframe','height' : 90,'width' : 728,'params' : {}};</script><script src='https://www.highperformanceformat.com/fe70e3d6b0cc5f0a036ef9833ca34d2a/invoke.js'></script>",
@@ -24,6 +26,6 @@
   },
   "google_search_console": "<meta name='google-site-verification' content='zng8D6p1h0ssYPsuLPCMwRscYhqPvn57NUh4QvARxwY' />",
   "mondiad_meta": "<meta name='mnd-ver' content='r1yjwtbaxjbjxdp0587ow' />",
-  "exit_direct_link": "https://www.effectivecpmnetwork.com/iiuhf0b3d6?key=1c1ba50352ab2f0906152960b6d10d77",
-  "cloak_direct_link": "https://www.effectivecpmnetwork.com/iiuhf0b3d6?key=1c1ba50352ab2f0906152960b6d10d77"
+  "exit_direct_link": "https://www.effectivecpmnetwork.com/pqxbs4r0q?key=906787aaf091812e7824f389f3acf1bc",
+  "cloak_direct_link": "https://www.effectivecpmnetwork.com/pqxbs4r0q?key=906787aaf091812e7824f389f3acf1bc"
 }
